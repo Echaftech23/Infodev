@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const flash = require('connect-flash');
@@ -15,7 +16,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Session setup
 app.use(session({
-  secret: 'your_secret_key',
+  secret: process.env.SESSION_SECRET || 'your_fallback_secret',
   resave: false,
   saveUninitialized: true
 }));

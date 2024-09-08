@@ -4,7 +4,8 @@
   "description": "A dynamic tech news blog for developers, featuring user authentication, article management, and interactive discussions.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon "
   },
   "keywords": [],
   "author": "",
@@ -16,6 +17,7 @@
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
+    "mysql": "^2.18.1",
     "mysql2": "^3.11.0",
     "sequelize": "^6.37.3"
   },
