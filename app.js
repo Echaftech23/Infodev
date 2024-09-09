@@ -25,7 +25,7 @@ app.use(session({
 app.use(flash());
 
 app.get('/', (req, res) => {
-  res.render('login');
+  res.render('index');
 });
 
 // Routes (to be added later)
