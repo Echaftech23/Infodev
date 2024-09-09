@@ -24,6 +24,10 @@ app.use(session({
 // Flash messages
 app.use(flash());
 
+app.get('/', (req, res) => {
+  res.render('login');
+});
+
 // Routes (to be added later)
 // app.use('/', require('./routes/index'));
 // app.use('/users', require('./routes/users'));
