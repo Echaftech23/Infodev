@@ -13,7 +13,7 @@
 	<link rel="stylesheet" href="css/glightbox.min.css">
 	<link rel="stylesheet" href="css/aos.css">
 	<link rel="stylesheet" href="css/style.css">
-	<title>MagDesign &mdash; Free Bootstrap 5 Website Template by Colorlib</title>
+	<title>MernOps BLog &mdash; Bootstrap 5 Website Template</title>
 
 <body>
 	<div class="site-mobile-menu site-navbar-target">
@@ -24,12 +24,14 @@
 		</div>
 		<div class="site-mobile-menu-body"></div>
 	</div>
+
+	<!-- nav  -->
 	<nav class="site-nav">
 		<div class="container">
 			<div class="site-navigation">
 				<div class="row">
 					<div class="col-md-6 text-center order-1 order-md-2 mb-3 mb-md-0">
-						<a href="index.html" class="logo m-0 text-uppercase">MagDesign</a>
+						<a href="index.ejs" class="logo m-0 text-uppercase">MernOps Blogs</a>
 					</div>
 					<div class="col-md-3 order-3 order-md-1">
 						<form action="#" class="search-form">
@@ -52,9 +54,9 @@
 					</div>
 				</div>
 				<ul class="js-clone-nav d-none d-lg-inline-none text-start site-menu float-end">
-					<li class="active"><a href="index.html">Home</a></li>
+					<li class="active"><a href="index.ejs">Home</a></li>
 					<li class="has-children">
-						<a href="categories.html">Categories</a>
+						<a href="categories.ejs">Categories</a>
 						<ul class="dropdown">
 							<li><a href="#">Travel</a></li>
 							<li><a href="#">Food</a></li>
@@ -78,6 +80,7 @@
 			</div>
 		</div>
 	</nav>
+
 	<div class="section pt-5 pb-0">
 		<div class="container">
 			<div class="row justify-content-center mb-5">
@@ -89,42 +92,46 @@
 				<div class="col-lg-12">
 					<div class="posts-slide-wrap">
 						<div class="posts-slide" id="posts-slide">
-							<div class="item">
-								<div class="post-entry d-lg-flex">
-									<div class="me-lg-5 thumbnail mb-4 mb-lg-0">
-										<a href="single.html">
-											<img src="images/post_lg_1.jpg" alt="Image" class="img-fluid">
+							<div class="article-list">
+
+								<% articles.forEach(function(article) { %>
+								  <div class="item">
+									<div class="post-entry d-lg-flex">
+									  <div class="me-lg-5 thumbnail mb-4 mb-lg-0">
+										<a href="/articles/<%= article.id %>">
+										  <img src="<%= article.image ? article.image : 'images/post_lg_2.jpg' %>" alt="Image" class="img-fluid">
 										</a>
-									</div>
-									<div class="content align-self-center">
+									  </div>
+									  <div class="content align-self-center">
 										<div class="post-meta mb-3">
-											<a href="#" class="category">Business</a>, <a href="#"
-												class="category">Travel</a> &mdash;
-											<span class="date">July 2, 2020</span>
+										  <a href="#" class="category">Business</a>, <a href="#" class="category">Travel</a> &mdash;
+										  <span class="date"><%= new Date(article.createdAt).toDateString() %></span>
 										</div>
-										<h2 class="heading"><a href="single.html">Your most unhappy customers are your
-												greatest source of learning.</a></h2>
-										<p>Far far away, behind the word mountains, far from the countries Vokalia and
-											Consonantia, there live the blind texts. Separated they live in
-											Bookmarksgrove right at the coast of the Semantics, a large language ocean.
-										</p>
+										<h2 class="heading">
+										  <a href="/articles/<%= article.id %>">
+											<%= article.title %>
+										  </a>
+										</h2>
+										<p><%= article.content.substring(0, 100) %>...</p>
 										<a href="#" class="post-author d-flex align-items-center">
-											<div class="author-pic">
-												<img src="images/person_1.jpg" alt="Image">
-											</div>
-											<div class="text">
-												<strong>Sergy Campbell</strong>
-												<span>CEO and Founder</span>
-											</div>
+										  <div class="author-pic">
+											<img src="images/person_1.jpg" alt="Image">
+										  </div>
+										  <div class="text">
+											<strong>Author Name</strong>
+											<span>Author Role</span>
+										  </div>
 										</a>
+									  </div>
 									</div>
-								</div>
-							</div>
+								  </div>
+								<% }) %>
+							  </div>
 
 							<div class="item">
 								<div class="post-entry d-lg-flex">
 									<div class="me-lg-5 thumbnail mb-4 mb-lg-0">
-										<a href="single.html">
+										<a href="show.ejs">
 											<img src="images/post_lg_2.jpg" alt="Image" class="img-fluid">
 										</a>
 									</div>
@@ -134,71 +141,7 @@
 												class="category">Travel</a> &mdash;
 											<span class="date">July 2, 2020</span>
 										</div>
-										<h2 class="heading"><a href="single.html">Your most unhappy customers are your
-												greatest source of learning.</a></h2>
-										<p>Far far away, behind the word mountains, far from the countries Vokalia and
-											Consonantia, there live the blind texts. Separated they live in
-											Bookmarksgrove right at the coast of the Semantics, a large language ocean.
-										</p>
-										<a href="#" class="post-author d-flex align-items-center">
-											<div class="author-pic">
-												<img src="images/person_1.jpg" alt="Image">
-											</div>
-											<div class="text">
-												<strong>Sergy Campbell</strong>
-												<span>CEO and Founder</span>
-											</div>
-										</a>
-									</div>
-								</div>
-							</div>
-
-							<div class="item">
-								<div class="post-entry d-lg-flex">
-									<div class="me-lg-5 thumbnail mb-4 mb-lg-0">
-										<a href="single.html">
-											<img src="images/post_lg_3.jpg" alt="Image" class="img-fluid">
-										</a>
-									</div>
-									<div class="content align-self-center">
-										<div class="post-meta mb-3">
-											<a href="#" class="category">Business</a>, <a href="#"
-												class="category">Travel</a> &mdash;
-											<span class="date">July 2, 2020</span>
-										</div>
-										<h2 class="heading"><a href="single.html">Your most unhappy customers are your
-												greatest source of learning.</a></h2>
-										<p>Far far away, behind the word mountains, far from the countries Vokalia and
-											Consonantia, there live the blind texts. Separated they live in
-											Bookmarksgrove right at the coast of the Semantics, a large language ocean.
-										</p>
-										<a href="#" class="post-author d-flex align-items-center">
-											<div class="author-pic">
-												<img src="images/person_1.jpg" alt="Image">
-											</div>
-											<div class="text">
-												<strong>Sergy Campbell</strong>
-												<span>CEO and Founder</span>
-											</div>
-										</a>
-									</div>
-								</div>
-							</div>
-
-							<div class="item">
-								<div class="post-entry d-lg-flex">
-									<div class="me-lg-5 thumbnail mb-4 mb-lg-0">
-										<a href="single.html">
-											<img src="images/post_lg_4.jpg" alt="Image" class="img-fluid">
-										</a>
-									</div>
-									<div class="content align-self-center">
-										<div class="post-meta mb-3">
-											<a href="#" class="category">Business</a>, <a href="#"
-												class="category">Travel</a> &mdash;
-											<span class="date">July 2, 2020</span>
-										</div>
-										<h2 class="heading"><a href="single.html">Your most unhappy customers are your
+										<h2 class="heading"><a href="show.ejs">Your most unhappy customers are your
 												greatest source of learning.</a></h2>
 										<p>Far far away, behind the word mountains, far from the countries Vokalia and
 											Consonantia, there live the blind texts. Separated they live in
@@ -229,7 +172,7 @@
 				<div class="col-lg-4">
 					<div class="post-entry d-block small-post-entry-v">
 						<div class="thumbnail">
-							<a href="single.html">
+							<a href="show.ejs">
 								<img src="images/img_2.jpg" alt="Image" class="img-fluid">
 							</a>
 						</div>
@@ -239,7 +182,7 @@
 								&mdash;
 								<span class="date">July 2, 2020</span>
 							</div>
-							<h2 class="heading mb-3"><a href="single.html">Your most unhappy customers are your greatest
+							<h2 class="heading mb-3"><a href="show.ejs">Your most unhappy customers are your greatest
 									source of learning.</a></h2>
 							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia,
 								there live the blind texts.</p>
@@ -258,7 +201,7 @@
 				<div class="col-lg-4">
 					<div class="post-entry d-block small-post-entry-v">
 						<div class="thumbnail">
-							<a href="single.html">
+							<a href="show.ejs">
 								<img src="images/img_3.jpg" alt="Image" class="img-fluid">
 							</a>
 						</div>
@@ -268,7 +211,7 @@
 								&mdash;
 								<span class="date">July 2, 2020</span>
 							</div>
-							<h2 class="heading mb-3"><a href="single.html">Your most unhappy customers are your greatest
+							<h2 class="heading mb-3"><a href="show.ejs">Your most unhappy customers are your greatest
 									source of learning.</a></h2>
 							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia,
 								there live the blind texts.</p>
@@ -287,7 +230,7 @@
 				<div class="col-lg-4">
 					<div class="post-entry d-block small-post-entry-v">
 						<div class="thumbnail">
-							<a href="single.html">
+							<a href="show.ejs">
 								<img src="images/img_4.jpg" alt="Image" class="img-fluid">
 							</a>
 						</div>
@@ -316,7 +259,7 @@
 				<div class="col-lg-4">
 					<div class="post-entry d-block small-post-entry-v">
 						<div class="thumbnail">
-							<a href="single.html">
+							<a href="show.ejs">
 								<img src="images/img_4.jpg" alt="Image" class="img-fluid">
 							</a>
 						</div>
@@ -345,7 +288,7 @@
 				<div class="col-lg-4">
 					<div class="post-entry d-block small-post-entry-v">
 						<div class="thumbnail">
-							<a href="single.html">
+							<a href="show.ejs">
 								<img src="images/img_5.jpg" alt="Image" class="img-fluid">
 							</a>
 						</div>
@@ -374,7 +317,7 @@
 				<div class="col-lg-4">
 					<div class="post-entry d-block small-post-entry-v">
 						<div class="thumbnail">
-							<a href="single.html">
+							<a href="show.ejs">
 								<img src="images/img_6.jpg" alt="Image" class="img-fluid">
 							</a>
 						</div>
@@ -420,7 +363,7 @@
 				<div class="item">
 					<div class="post-entry d-block small-post-entry-v">
 						<div class="thumbnail">
-							<a href="single.html">
+							<a href="show.ejs">
 								<img src="images/img_7.jpg" alt="Image" class="img-fluid">
 							</a>
 						</div>
@@ -430,7 +373,7 @@
 								&mdash;
 								<span class="date">July 2, 2020</span>
 							</div>
-							<h2 class="heading mb-3"><a href="single.html">Your most unhappy customers are your greatest
+							<h2 class="heading mb-3"><a href="show.ejs">Your most unhappy customers are your greatest
 									source of learning.</a></h2>
 							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia,
 								there live the blind texts.</p>
@@ -449,7 +392,7 @@
 				<div class="item">
 					<div class="post-entry d-block small-post-entry-v">
 						<div class="thumbnail">
-							<a href="single.html">
+							<a href="show.ejs">
 								<img src="images/img_2.jpg" alt="Image" class="img-fluid">
 							</a>
 						</div>
@@ -459,7 +402,7 @@
 								&mdash;
 								<span class="date">July 2, 2020</span>
 							</div>
-							<h2 class="heading mb-3"><a href="single.html">Your most unhappy customers are your greatest
+							<h2 class="heading mb-3"><a href="show.ejs">Your most unhappy customers are your greatest
 									source of learning.</a></h2>
 							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia,
 								there live the blind texts.</p>
@@ -478,7 +421,7 @@
 				<div class="item">
 					<div class="post-entry d-block small-post-entry-v">
 						<div class="thumbnail">
-							<a href="single.html">
+							<a href="show.ejs">
 								<img src="images/img_3.jpg" alt="Image" class="img-fluid">
 							</a>
 						</div>
@@ -488,7 +431,7 @@
 								&mdash;
 								<span class="date">July 2, 2020</span>
 							</div>
-							<h2 class="heading mb-3"><a href="single.html">Your most unhappy customers are your greatest
+							<h2 class="heading mb-3"><a href="show.ejs">Your most unhappy customers are your greatest
 									source of learning.</a></h2>
 							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia,
 								there live the blind texts.</p>
@@ -507,7 +450,7 @@
 				<div class="item">
 					<div class="post-entry d-block small-post-entry-v">
 						<div class="thumbnail">
-							<a href="single.html">
+							<a href="show.ejs">
 								<img src="images/img_4.jpg" alt="Image" class="img-fluid">
 							</a>
 						</div>
@@ -517,7 +460,7 @@
 								&mdash;
 								<span class="date">July 2, 2020</span>
 							</div>
-							<h2 class="heading mb-3"><a href="single.html">Your most unhappy customers are your greatest
+							<h2 class="heading mb-3"><a href="show.ejs">Your most unhappy customers are your greatest
 									source of learning.</a></h2>
 							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia,
 								there live the blind texts.</p>
@@ -536,7 +479,7 @@
 				<div class="item">
 					<div class="post-entry d-block small-post-entry-v">
 						<div class="thumbnail">
-							<a href="single.html">
+							<a href="show.ejs">
 								<img src="images/img_5.jpg" alt="Image" class="img-fluid">
 							</a>
 						</div>
@@ -546,7 +489,7 @@
 								&mdash;
 								<span class="date">July 2, 2020</span>
 							</div>
-							<h2 class="heading mb-3"><a href="single.html">Your most unhappy customers are your greatest
+							<h2 class="heading mb-3"><a href="show.ejs">Your most unhappy customers are your greatest
 									source of learning.</a></h2>
 							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia,
 								there live the blind texts.</p>
@@ -565,7 +508,7 @@
 				<div class="item">
 					<div class="post-entry d-block small-post-entry-v">
 						<div class="thumbnail">
-							<a href="single.html">
+							<a href="show.ejs">
 								<img src="images/img_6.jpg" alt="Image" class="img-fluid">
 							</a>
 						</div>
@@ -575,7 +518,7 @@
 								&mdash;
 								<span class="date">July 2, 2020</span>
 							</div>
-							<h2 class="heading mb-3"><a href="single.html">Your most unhappy customers are your greatest
+							<h2 class="heading mb-3"><a href="show.ejs">Your most unhappy customers are your greatest
 									source of learning.</a></h2>
 							<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia,
 								there live the blind texts.</p>
@@ -615,7 +558,7 @@
 											class="category">Travel</a> &mdash;
 										<span class="date">July 2, 2020</span>
 									</div>
-									<h2 class="heading"><a href="single.html">Your most unhappy customers are your
+									<h2 class="heading"><a href="show.ejs">Your most unhappy customers are your
 											greatest source of learning.</a></h2>
 									<a href="#" class="post-author d-flex align-items-center">
 										<div class="author-pic">
@@ -640,7 +583,7 @@
 											class="category">Travel</a> &mdash;
 										<span class="date">July 2, 2020</span>
 									</div>
-									<h2 class="heading"><a href="single.html">Your most unhappy customers are your
+									<h2 class="heading"><a href="show.ejs">Your most unhappy customers are your
 											greatest source of learning.</a></h2>
 									<a href="#" class="post-author d-flex align-items-center">
 										<div class="author-pic">
@@ -665,7 +608,7 @@
 											class="category">Travel</a> &mdash;
 										<span class="date">July 2, 2020</span>
 									</div>
-									<h2 class="heading"><a href="single.html">Your most unhappy customers are your
+									<h2 class="heading"><a href="show.ejs">Your most unhappy customers are your
 											greatest source of learning.</a></h2>
 									<a href="#" class="post-author d-flex align-items-center">
 										<div class="author-pic">
@@ -699,7 +642,7 @@
 											class="category">Travel</a> &mdash;
 										<span class="date">July 2, 2020</span>
 									</div>
-									<h2 class="heading"><a href="single.html">Your most unhappy customers are your
+									<h2 class="heading"><a href="show.ejs">Your most unhappy customers are your
 											greatest source of learning.</a></h2>
 									<a href="#" class="post-author d-flex align-items-center">
 										<div class="author-pic">
@@ -724,7 +667,7 @@
 											class="category">Travel</a> &mdash;
 										<span class="date">July 2, 2020</span>
 									</div>
-									<h2 class="heading"><a href="single.html">Your most unhappy customers are your
+									<h2 class="heading"><a href="show.ejs">Your most unhappy customers are your
 											greatest source of learning.</a></h2>
 									<a href="#" class="post-author d-flex align-items-center">
 										<div class="author-pic">
@@ -749,7 +692,7 @@
 											class="category">Travel</a> &mdash;
 										<span class="date">July 2, 2020</span>
 									</div>
-									<h2 class="heading"><a href="single.html">Your most unhappy customers are your
+									<h2 class="heading"><a href="show.ejs">Your most unhappy customers are your
 											greatest source of learning.</a></h2>
 									<a href="#" class="post-author d-flex align-items-center">
 										<div class="author-pic">
@@ -787,6 +730,8 @@
 			</form>
 		</div>
 	</div>
+
+	<!-- footer -->
 	<div class="site-footer">
 		<div class="container">
 			<div class="row justify-content-center copyright">
@@ -820,29 +765,31 @@
 				<span class="visually-hidden">Loading...</span>
 			</div>
 		</div>
-		<script src="js/bootstrap.bundle.min.js"></script>
-		<script src="js/tiny-slider.js"></script>
-		<script src="js/glightbox.min.js"></script>
-		<script src="js/aos.js"></script>
-		<script src="js/navbar.js"></script>
-		<script src="js/counter.js"></script>
-		<script src="js/custom.js"></script>
+	</div>
 
-		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag() { dataLayer.push(arguments); }
-			gtag('js', new Date());
+	<script src="js/bootstrap.bundle.min.js"></script>
+	<script src="js/tiny-slider.js"></script>
+	<script src="js/glightbox.min.js"></script>
+	<script src="js/aos.js"></script>
+	<script src="js/navbar.js"></script>
+	<script src="js/counter.js"></script>
+	<script src="js/custom.js"></script>
 
-			gtag('config', 'UA-23581568-13');
-		</script>
-		<script defer
-			src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015"
-			integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ=="
-			data-cf-beacon='{"rayId":"8be632745e3266e6","version":"2024.8.0","serverTiming":{"name":{"cfL4":true}},"token":"cd0b4b3a733644fc843ef0b185f98241","b":1}'
-			crossorigin="anonymous"></script>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+
+		gtag('config', 'UA-23581568-13');
+	</script>
+	<script defer
+		src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015"
+		integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ=="
+		data-cf-beacon='{"rayId":"8be632745e3266e6","version":"2024.8.0","serverTiming":{"name":{"cfL4":true}},"token":"cd0b4b3a733644fc843ef0b185f98241","b":1}'
+		crossorigin="anonymous">
+	</script>
+
 </body>
-
-<!-- Mirrored from preview.colorlib.com/theme/magdesign/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 05 Sep 2024 12:24:42 GMT -->
 
 </html>
