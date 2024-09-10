@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
 });
 
 // routes
-app.use('/', articlesRouter);
+app.use('/articles', articlesRouter);
 // app.use('/users', require('./routes/users'));
 // app.use('/articles', require('./routes/articles'));
 
