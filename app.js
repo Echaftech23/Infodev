@@ -3,7 +3,7 @@ const express = require('express');
 const session = require('express-session');
 const flash = require('connect-flash');
 const path = require('path');
-const articlesRouter = require('./routes/articles');
+const routes = require('./routes/web');
 const app = express();
 
 // Middleware
@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
 });
 
 // routes
-app.use('/articles', articlesRouter);
+app.use('/', routes);
 // app.use('/users', require('./routes/users'));
 // app.use('/articles', require('./routes/articles'));
 

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const articleController = require("../controllers/ArticleController");
 
+// Article routes :
 router.get("/", articleController.index);
 router.get("/articles/create", articleController.add);
 router.post("/store", articleController.store);
