@@ -25,10 +25,6 @@ app.use(session({
 // Flash messages
 app.use(flash());
 
-app.get('/', (req, res) => {
-  res.render('index');
-});
-
 // routes
 app.use('/', routes);
 // app.use('/users', require('./routes/users'));
