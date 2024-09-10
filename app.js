@@ -3,7 +3,7 @@ const express = require('express');
 const session = require('express-session');
 const flash = require('connect-flash');
 const path = require('path');
-const articlesRouter = require('./routes/web');
+const routes = require('./routes/web');
 const app = express();
 const router = require("./routes/web");
 
