@@ -1,14 +1,21 @@
 const express = require("express");
-const router = express.Router();
+const Router = express.Router();
 const articleController = require("../controllers/ArticleController");
+const userController = require('../controllers/userController');
+
+
+Router.get("/login" , userController.getLoginPage)
+Router.get("/sign" ,userController.getSignPage )
+Router.post("/sign/addUser" ,userController.createUser)
+
 
 // Article routes :
-router.get("/", articleController.index);
-router.get("/articles/create", articleController.create);
-router.post("/store", articleController.store);
-router.get("/articles/:id", articleController.show);
-router.get("/articles/:id/edit", articleController.edit);
-router.put("/articles/:id", articleController.update);
-router.delete("/articles/:id", articleController.delete);
+Router.get("/", articleController.index);
+Router.get("/articles/create", articleController.create);
+Router.post("/store", articleController.store);
+Router.get("/articles/:id", articleController.show);
+Router.get("/articles/:id/edit", articleController.edit);
+Router.put("/articles/:id", articleController.update);
+Router.delete("/articles/:id", articleController.delete);
 
-module.exports = router;
+module.exports = Router;
