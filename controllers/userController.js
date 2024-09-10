@@ -20,7 +20,7 @@ const createUser = async (req , res)=>{
         const newUser = await User.create({username , email , password});
         res.redirect("/")
     }else{
-        res.body.message = "Please check your imformations";
+        // res.body.message = "Please check your imformations";
         res.redirect("/sign")
     }
 }
