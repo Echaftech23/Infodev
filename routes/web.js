@@ -18,4 +18,10 @@ Router.get("/articles/:id/edit", articleController.edit);
 Router.put("/articles/:id", articleController.update);
 Router.delete("/articles/:id", articleController.delete);
 
+// Comments router :
+Router.post('/', commentController.createComment);
+Router.get('/:articleId', commentController.getCommentsByArticle);
+Router.put('/:commentId', commentController.updateComment);
+Router.delete('/:commentId', commentController.deleteComment);
+
 module.exports = Router;
