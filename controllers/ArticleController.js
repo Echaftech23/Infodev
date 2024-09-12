@@ -56,7 +56,7 @@ class ArticleController {
     static async show(req, res) {
         try {
             const article = await Article.findByPk(req.params.id);
-            res.render("article/showArticle", { article });
+            res.render("articles/show", { article });
         } catch (error) {
             console.error("Error getting article:", error);
             return res.status(500).send({ error: "An error occurred while getting the article." });
