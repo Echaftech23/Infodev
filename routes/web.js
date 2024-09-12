@@ -6,6 +6,7 @@ const commentController = require('../controllers/commentController');
 
 
 Router.get("/login" , userController.getLoginPage)
+Router.post("/login/check_user" , userController.check_user)
 Router.get("/sign" ,userController.getSignPage )
 Router.post("/sign/addUser" ,userController.createUser)
 
