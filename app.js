@@ -30,9 +30,12 @@ app.use(flash());
 //   res.render('index');
 // });
 
+app.get('/articleTest', (req, res) => {
+  res.render('single');
+});
 // routes
 app.use('/',router);
-// app.use('/login', UserRouter);
+
 // app.use('/users', require('./routes/users'));
 // app.use('/articles', require('./routes/articles'));
 

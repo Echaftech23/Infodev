@@ -1,7 +1,5 @@
-const Comment = require('../models/Comment');
-const Article = require('../models/Article');
-const User = require('../models/User');
-const { createCommentSchema, updateCommentSchema } = require('../requests/commentRequest');
+const { Article } = require('../models');
+const { createCommentSchema, updateCommentSchema } = require('../requests/CommentRequest');
 
 // Créer un commentaire
 exports.createComment = async (req, res) => {

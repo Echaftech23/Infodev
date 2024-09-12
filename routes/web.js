@@ -2,6 +2,7 @@ const express = require("express");
 const Router = express.Router();
 const articleController = require("../controllers/ArticleController");
 const userController = require('../controllers/userController');
+const commentController = require('../controllers/commentController');
 
 
 Router.get("/login" , userController.getLoginPage)

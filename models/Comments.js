@@ -1,10 +1,18 @@
 // models/Comment.js
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const User = require('./User');
-const Article = require('./Article');
 
-class Comment extends Model {}
+module.exports = (sequelize, DataTypes) => {
+class Comment extends Model {
+
+  static associate(models) {
+    Comment.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+    Comment.belongsTo(models.Article, { foreignKey: 'articleId', as: 'article' });
+  }
+
+}
+
+
 
 Comment.init({
   content: {
@@ -14,26 +22,24 @@ Comment.init({
   userId: {
     type: DataTypes.INTEGER,
     references: {
-      model: User,
+      model: 'Users',
       key: 'id'
     }
   },
   articleId: {
     type: DataTypes.INTEGER,
     references: {
-      model: Article,
+      model: 'Articles',
       key: 'id'
     }
   }
 }, {
   sequelize,
   modelName: 'Comment',
-  tableName: 'comments',
   timestamps: true  
 });
 
 
-Comment.belongsTo(User, { foreignKey: 'userId', as: 'user' });
-Comment.belongsTo(Article, { foreignKey: 'articleId', as: 'article' });
+return Comment;
 
-module.exports = Comment;
+};
