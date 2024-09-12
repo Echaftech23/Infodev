@@ -2,82 +2,101 @@
 <html lang="en">
 
 <head>
-    <title>Login</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&amp;display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/login.css">
+  <title>Login</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/login.css">
 
 <body>
-    <section class="ftco-section">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-6 text-center mb-5">
-                    <h2 class="heading-section">Login</h2>
-                </div>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-md-12 col-lg-10">
-                    <div class="wrap d-md-flex">
-                        <div class="text-wrap p-4 p-lg-5 text-center d-flex align-items-center order-md-last">
-                            <div class="text w-100">
-                                <h2>Welcome to login</h2>
-                                <p>Don't have an account?</p>
-                                <a href="/sign" class="btn btn-white btn-outline-white">Sign Up</a>
-                            </div>
-                        </div>
-                        <div class="login-wrap p-4 p-lg-5">
-                            <div class="d-flex">
-                                <div class="w-100">
-                                    <h3 class="mb-4">Sign In</h3>
-                                </div>
-                                <div class="w-100">
-                                    <p class="social-media d-flex justify-content-end">
-                                        <a href="#"
-                                            class="social-icon d-flex align-items-center justify-content-center"><span
-                                                class="fa fa-facebook"></span></a>
-                                        <a href="#"
-                                            class="social-icon d-flex align-items-center justify-content-center"><span
-                                                class="fa fa-twitter"></span></a>
-                                    </p>
-                                </div>
-                            </div>
-                            <form action="#" class="signin-form">
-                                <div class="form-group mb-3">
-                                    <label class="label" for="name">Username</label>
-                                    <input type="text" class="form-control" placeholder="Username" required>
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label class="label" for="password">Password</label>
-                                    <input type="password" class="form-control" placeholder="Password" required>
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="form-control btn btn-primary submit px-3">Sign
-                                        In</button>
-                                </div>
-                                <div class="form-group d-md-flex">
-                                    <div class="w-50 text-left">
-                                        <label class="checkbox-wrap checkbox-primary mb-0">Remember Me
-                                            <input type="checkbox" checked>
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </div>
-                                    <div class="w-50 text-md-right">
-                                        <a href="#">Forgot Password</a>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <section class="ftco-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6 text-center mb-5">
+          <h2 class="heading-section">Login</h2>
         </div>
-    </section>
-    <script src="js/jquery.min.js"></script>
-    <script src="js/popper.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js"></script>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-md-12 col-lg-10">
+          <div class="wrap d-md-flex">
+            <div class="text-wrap p-4 p-lg-5 text-center d-flex align-items-center order-md-last">
+              <div class="text w-100">
+                <h2>Welcome to login</h2>
+                <p>Don't have an account?</p>
+                <a href="/sign" class="btn btn-white btn-outline-white">Sign Up</a>
+              </div>
+            </div>
+            <div class="login-wrap p-4 p-lg-5">
+              <div class="d-flex">
+                <div class="w-100">
+                  <h3 class="mb-4">Sign In</h3>
+                </div>
+                <div class="w-100">
+                  <p class="social-media d-flex justify-content-end">
+                    <a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-facebook"></span></a>
+                    <a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-twitter"></span></a>
+                  </p>
+                </div>
+              </div>
+              <form action="/login/check_user" method="post" onsubmit="return checkOnSubmit()" class="signin-form">
+                <div class="form-group mb-3">
+                  <label class="label" for="name">Email</label>
+                  <input type="text" class="form-control" id="inp_email" name="email" placeholder="Enter Email" required>
+                </div>
+                <div class="form-group mb-3">
+                  <label class="label" for="password">Password</label>
+                  <input type="password" class="form-control" id="inp_password" name="password" placeholder="Enter Password" required>
+                </div>
+                <div id="error_message" style="text-align: center;margin-bottom: 11px; color: red;"></div>          
+                <div class="form-group">
+                  <button type="submit" class="form-control btn btn-primary submit px-3">Sign
+                    In</button>
+                </div>
+                <div class="form-group d-md-flex">
+                  <div class="w-50 text-left">
+                    <label class="checkbox-wrap checkbox-primary mb-0">Remember Me
+                      <input type="checkbox" >
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
+                  <div class="w-50 text-md-right">
+                    <a href="#">Forgot Password</a>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/popper.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+
+  <script>
+    let inp_email = document.getElementById("inp_email");
+    let inp_password = document.getElementById("inp_password")
+    let errorMessage = document.getElementById("  ");
+    function checkOnSubmit() {
+      errorMessage.textContent = '';
+      const email = inp_email.value;
+      const password = inp_password.value;
+
+      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+      if (!emailPattern.test(email)) {
+        errorMessage.textContent = 'Please enter a valid email address.';
+        return false;
+      }
+      if (password.length < 6) {
+        errorMessage.textContent = 'Password must be at least 6 characters long.';
+        return false;
+      }
+      return true;
+    }
+  </script>
 </body>
 
 </html>

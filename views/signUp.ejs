@@ -43,29 +43,30 @@
                                     </p>
                                 </div>
                             </div>
-                            <form action="/sign/addUser" method="post" class="signin-form">
+                            <form action="/sign/addUser" method="post" onsubmit="return checkOnSubmit()" class="signin-form">
                                 <div class="form-group mb-3">
                                     <label class="label" for="name">Username</label>
                                     <input type="text" class="form-control" placeholder="Enter Username" name="username" required>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="label" for="name">Email</label>
-                                    <input type="text" class="form-control" placeholder="Enter Your Email" name="email" required>
+                                    <input type="text" class="form-control" placeholder="Enter Your Email" id="inp_email" name="email" required>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="label" for="password">Password</label>
-                                    <input type="password" class="form-control" placeholder="Enter Password" name="password" required>
+                                    <input type="password" class="form-control" placeholder="Enter Password" id="inp_password" name="password" required>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label class="label" for="password">Confirm Password</label>
-                                    <input type="password" class="form-control" placeholder="Confirm Password" name="Confirm_password" required>
+                                    <input type="password" class="form-control" placeholder="Confirm Password" id="inp_conf_password" name="Confirm_password" required>
                                 </div>
+                                <div id="error_message" style="text-align: center;margin-bottom: 11px; color: red;"></div>
                                 <div class="form-group">
-                                    <button type="submit" class="form-control btn btn-primary submit px-3">Sign
+                                    <button type="submit" class="form-control btn btn-primary submit px-3" >Sign
                                         In</button>
                                 </div>
-                                <div class="form-group d-md-flex">
-                                    <div class="w-50 text-md-right">
+                                <div class="form-group d-md-flex justify-content-center">
+                                    <div class="w-50 text-md-center">
                                         <a href="#">Forgot Password</a>
                                     </div>
                                 </div>
@@ -80,6 +81,37 @@
     <script src="js/popper.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
+
+    <script>
+        let inp_email = document.getElementById("inp_email");
+        let inp_password = document.getElementById("inp_password");
+        let inp_conf_password = document.getElementById("inp_conf_password");
+        let errorMessage = document.getElementById("error_message");
+
+function checkOnSubmit() {
+    errorMessage.textContent = '';
+    const email = inp_email.value;
+    const password = inp_password.value;
+    const conf_password = inp_conf_password.value;
+
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailPattern.test(email)) {
+        errorMessage.textContent = 'Please enter a valid email address.';
+        return false;
+    }
+    if (password.length < 6) {
+        errorMessage.textContent = 'Password must be at least 6 characters long.';
+        return false;
+    }
+    if(password != conf_password){
+        errorMessage.textContent = 'Your Passwords are not compatible';
+        return false;
+    }
+    
+    return true;
+}
+
+    </script>
 </body>
 
 </html>
