@@ -4,16 +4,21 @@ const articleController = require("../controllers/ArticleController");
 const userController = require('../controllers/userController');
 const commentController = require('../controllers/commentController');
 
+// User routes:
+Router.get("/login", (req, res) => {
+    userController.getLoginPage(req, res, { layout: false });
+});
+Router.get("/sign", (req, res) => {
+    userController.getLoginPage(req, res, { layout: false });
+});
 
-Router.get("/login" , userController.getLoginPage)
 Router.post("/login/check_user" , userController.check_user)
-Router.get("/sign" ,userController.getSignPage )
 Router.post("/sign/addUser" ,userController.createUser)
 
 
 // Article routes :
 Router.get("/", articleController.index);
-Router.get("/articles/create", articleController.add);
+Router.get("/articles/create", articleController.create);
 Router.post("/store", articleController.store);
 Router.get("/articles/:id", articleController.show);
 Router.get("/articles/:id/edit", articleController.edit);
@@ -27,3 +32,4 @@ Router.put('/:commentId', commentController.updateComment);
 Router.delete('/:commentId', commentController.deleteComment);
 
 module.exports = Router;
+

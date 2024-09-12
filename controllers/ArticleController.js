@@ -15,31 +15,12 @@ class ArticleController {
     }
 
     // Create a new article
-    static async add(req, res) {
-        // Validate input using ArticleRequest
-        const validationResult = ArticleRequest.validate(req);
-        if (validationResult.error) {
-            console.error("Error validation :", validationResult.error.details);
-            return res.status(400).send({ errors: validationResult.error.details });
-        }
-
+    static async create(req, res) {        
         try {
-            // Create a new article in the database using Sequelize
-            const { title, content, image } = req.body;
-            const article = await Article.create({
-                title,
-                content,
-                image,
-                author_id: req.user.id
-            });
-
-            res.render("article/addArticle", {
-                article
-            });
-
+            res.render("articles/add");
         } catch (error) {
-            console.error("Error creating article:", error);
-            return res.status(500).send({ error: "An error occurred while creating the article." });
+            console.error("Error getting article:", error);
+            return res.status(500).send({ error: "An error occurred while getting the article." });
         }
     }
 
@@ -75,9 +56,7 @@ class ArticleController {
     static async show(req, res) {
         try {
             const article = await Article.findByPk(req.params.id);
-            res.render("article/showArticle", {
-                article
-            });
+            res.render("articles/show", { article });
         } catch (error) {
             console.error("Error getting article:", error);
             return res.status(500).send({ error: "An error occurred while getting the article." });

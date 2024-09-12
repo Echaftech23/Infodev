@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Article.belongsToMany(models.User, { through: 'ArticleUser' });
     }
-
+  
   }
 
   Article.init({

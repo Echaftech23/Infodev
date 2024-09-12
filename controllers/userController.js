@@ -2,12 +2,12 @@ const { date } = require('joi');
 const { User } = require('../models');
 const bcrypt = require('bcryptjs');
 
-const getLoginPage = async(req,res)=>{
-    res.render("login");
+const getLoginPage = async (req, res, options = {}) => {
+    res.render("login", options);
 }
 
-const getSignPage = async(req,res) =>{
-    res.render("signUp");
+const getSignPage = async (req, res, options = {}) => {
+    res.render("signUp", options);
 }
 
 const createUser = async (req , res)=>{

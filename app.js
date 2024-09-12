@@ -7,6 +7,8 @@ const routes = require('./routes/web');
 const app = express();
 const router = require("./routes/web");
 
+const expressLayouts = require('express-ejs-layouts')
+
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -23,19 +25,17 @@ app.use(session({
   saveUninitialized: true
 }));
 
+// Set Templating Engine
+app.use(expressLayouts)
+app.set('layout', 'layouts/layout')
+app.set('view engine', 'ejs')
+
 // Flash messages
 app.use(flash());
 
-// app.get('/', (req, res) => {
-//   res.render('index');
-// });
-
-app.get('/articleTest', (req, res) => {
-  res.render('single');
-});
 // routes
 app.use('/',router);
-
+// app.use('/login', UserRouter);
 // app.use('/users', require('./routes/users'));
 // app.use('/articles', require('./routes/articles'));
 
