@@ -5,6 +5,7 @@ const flash = require('connect-flash');
 const path = require('path');
 const routes = require('./routes/web');
 const app = express();
+const router = require("./routes/web");
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -25,12 +26,13 @@ app.use(session({
 // Flash messages
 app.use(flash());
 
-app.get('/', (req, res) => {
-  res.render('index');
-});
+// app.get('/', (req, res) => {
+//   res.render('index');
+// });
 
 // routes
-app.use('/', routes);
+app.use('/',router);
+// app.use('/login', UserRouter);
 // app.use('/users', require('./routes/users'));
 // app.use('/articles', require('./routes/articles'));
 

@@ -1,21 +1,27 @@
 const express = require("express");
-const router = express.Router();
+const Router = express.Router();
 const articleController = require("../controllers/ArticleController");
-const profileController = require("../controllers/ProfileController");
+const userController = require('../controllers/userController');
+const profileController = require('../controllers/ProfileController'); // Make sure to import your profile controller
 
-// Article routes
-router.get("/", articleController.index);
-router.get("/articles/create", articleController.add);
-router.post("/store", articleController.store);
-router.get("/articles/:id", articleController.show);
-router.get("/articles/:id/edit", articleController.edit);
-router.put("/articles/:id", articleController.update);
-router.delete("/articles/:id", articleController.delete);
+// User authentication routes
+Router.get("/login", userController.getLoginPage);
+Router.get("/sign", userController.getSignPage);
+Router.post("/sign/addUser", userController.createUser);
 
 // Profile routes
-router.get("/profile", profileController.index);
-router.get("/profile/edit", profileController.edit);
-router.put("/profile", profileController.update);
-router.delete("/profile", profileController.delete);
+Router.get("/profile", profileController.index);           // View user profile
+Router.get("/profile/edit", profileController.edit);       // Get edit profile page
+Router.put("/profile", profileController.update);          // Update user profile
+Router.delete("/profile", profileController.delete);       // Delete user profile
 
-module.exports = router;
+// Article routes
+Router.get("/", articleController.index);
+Router.get("/articles/create", articleController.add);
+Router.post("/store", articleController.store);
+Router.get("/articles/:id", articleController.show);
+Router.get("/articles/:id/edit", articleController.edit);
+Router.put("/articles/:id", articleController.update);
+Router.delete("/articles/:id", articleController.delete);
+
+module.exports = Router;
