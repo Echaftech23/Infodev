@@ -17,7 +17,7 @@ class ArticleController {
     // Create a new article
     static async create(req, res) {        
         try {
-            res.render("articles/addArticle");
+            res.render("articles/add");
         } catch (error) {
             console.error("Error getting article:", error);
             return res.status(500).send({ error: "An error occurred while getting the article." });

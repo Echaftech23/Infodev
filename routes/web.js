@@ -4,10 +4,17 @@ const articleController = require("../controllers/ArticleController");
 const userController = require('../controllers/userController');
 
 
-Router.get("/login" , userController.getLoginPage)
-Router.get("/sign" ,userController.getSignPage )
-Router.post("/sign/addUser" ,userController.createUser)
+// Router.get("/login" , userController.getLoginPage)
+// Router.get("/sign" , userController.getSignPage )
 
+// User routes:
+Router.get("/login", (req, res) => {
+    userController.getLoginPage(req, res, { layout: false });
+});
+Router.get("/sign", (req, res) => {
+    userController.getLoginPage(req, res, { layout: false });
+});
+Router.post("/sign/addUser" ,userController.createUser)
 
 // Article routes :
 Router.get("/", articleController.index);
