@@ -9,7 +9,7 @@ Router.get("/login", (req, res) => {
     userController.getLoginPage(req, res, { layout: false });
 });
 Router.get("/sign", (req, res) => {
-    userController.getLoginPage(req, res, { layout: false });
+    userController.getSignPage(req, res, { layout: false });
 });
 
 Router.post("/login/check_user" , userController.check_user)

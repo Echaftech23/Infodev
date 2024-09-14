@@ -39,10 +39,11 @@ class ArticleController {
                 title,
                 content,
                 image,
-                author_id: req.user.id
+                // autherId: req.session.loggedIn_user.id
+                autherId: 1
             });
 
-            res.render("article/addArticle", {
+            res.render("/", {
                 article
             });
 
