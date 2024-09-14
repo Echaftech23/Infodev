@@ -3,7 +3,6 @@ const express = require('express');
 const session = require('express-session');
 const flash = require('connect-flash');
 const path = require('path');
-const routes = require('./routes/web');
 const app = express();
 const router = require("./routes/web");
 
@@ -28,7 +27,6 @@ app.use(session({
 // Set Templating Engine
 app.use(expressLayouts)
 app.set('layout', 'layouts/layout')
-app.set('view engine', 'ejs')
 
 // Flash messages
 app.use(flash());
