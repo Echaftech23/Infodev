@@ -33,9 +33,6 @@ app.use(flash());
 
 // routes
 app.use('/',router);
-// app.use('/login', UserRouter);
-// app.use('/users', require('./routes/users'));
-// app.use('/articles', require('./routes/articles'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

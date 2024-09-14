@@ -4,8 +4,12 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Article extends Model {
 
-    static associate(models) {
-      Article.belongsToMany(models.User, { through: 'ArticleUser' });
+    static associate(models) {      
+
+      Article.belongsTo(models.User, {
+        foreignKey: 'autherId',
+        as: 'user'
+      });
     }
   
   }
@@ -13,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   Article.init({
     title: DataTypes.STRING,
     content: DataTypes.TEXT,
+    image: DataTypes.STRING,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
     autherId: DataTypes.INTEGER
