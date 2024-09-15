@@ -98,7 +98,8 @@ class ArticleController {
     static async edit(req, res) {
         try {
             const article = await Article.findByPk(req.params.id);
-            res.render("article/editArticle", {
+            console.log('Article:', article);
+            res.render("articles/edit", {
                 article
             });
         } catch (error) {
