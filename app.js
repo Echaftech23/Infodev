@@ -11,7 +11,7 @@ const expressLayouts = require('express-ejs-layouts')
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public',)));
 
 // EJS setup
 app.set('view engine', 'ejs');

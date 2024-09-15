@@ -1,5 +1,7 @@
 const { Article } = require('../models');
 const ArticleRequest = require('../requests/ArticleRequest');
+const fs = require('fs').promises;
+const path = require('path');
 
 class ArticleController {
 
@@ -25,31 +27,59 @@ class ArticleController {
     }
 
     static async store(req, res) {
-        // Validate input using ArticleRequest
-        const validationResult = ArticleRequest.validate(req);
-        if (validationResult.error) {
-            console.error("Error validation :", validationResult.error.details);
-            return res.status(400).send({ errors: validationResult.error.details });
-        }
-
         try {
-            // Create a new article in the database using Sequelize
-            const { title, content, image } = req.body;
-            const article = await Article.create({
-                title,
-                content,
-                image,
-                // autherId: req.session.loggedIn_user.id
-                autherId: 1
+            console.log('Request body:', req.body);
+            console.log('Request file:', req.file);
+
+            // Validate the request
+            const validationResult = ArticleRequest.validate(req);
+           
+            if (validationResult.error) {
+                console.log('Validation error:', validationResult.error);
+                if (req.file) {
+                    await fs.unlink(req.file.path);
+                }
+
+                return res.status(400).render('articles/add', { 
+                    errors: validationResult.error.details,
+                    oldInput: req.body,
+                });
+            }
+
+            // Handle file upload
+            let imagePath = null;
+            if (req.file) {
+                const uploadDir = path.join(__dirname, '..', 'public', 'uploads');
+
+                console.log('Upload directory:', uploadDir);
+
+                const fileExtension = path.extname(req.file.originalname);
+                const newFileName = `${Date.now()}${fileExtension}`;
+                const newPath = path.join(uploadDir, newFileName);
+               
+                await fs.rename(req.file.path, newPath);
+                imagePath = `/uploads/${newFileName}`;
+                console.log('File moved successfully to:', newPath);
+            }
+
+            // Create new article
+            const article = new Article({
+                title: req.body.title,
+                content: req.body.content,
+                image: imagePath,
+                autherId: 1,
             });
 
-            res.render("/", {
-                article
-            });
+            const savedArticle = await article.save();
+            console.log('Article saved successfully:', savedArticle);
 
+            return res.redirect("/");
         } catch (error) {
-            console.error("Error creating article:", error);
-            return res.status(500).send({ error: "An error occurred while creating the article." });
+            console.error('Detailed error in store method:', error);
+            return res.status(500).render('articles/add', { 
+                errors: [{ message: 'An error occurred while creating the article' }],
+                oldInput: req.body,
+            });
         }
     }
 
