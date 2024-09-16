@@ -25,7 +25,7 @@ Router.get("/articles/create", articleController.create);
 Router.post("/articles/store", upload.single('image'), articleController.store);
 Router.get("/articles/:id", articleController.show);
 Router.get("/articles/:id/edit", articleController.edit);
-Router.put("/articles/:id", articleController.update);
+Router.post("/articles/:id", upload.single('image'), articleController.update);
 Router.delete("/articles/:id", articleController.delete);
 
 // Comments router :

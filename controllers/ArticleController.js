@@ -98,10 +98,12 @@ class ArticleController {
     static async edit(req, res) {
         try {
             const article = await Article.findByPk(req.params.id);
-            console.log('Article:', article);
-            res.render("articles/edit", {
-                article
-            });
+            if (!article) {
+                return res.status(404).render('articles/edit', {
+                    errors: [{ message: 'Article not found' }],
+                });
+            }
+            res.render("articles/edit", { article });
         } catch (error) {
             console.error("Error getting article:", error);
             return res.status(500).send({ error: "An error occurred while getting the article." });
@@ -110,25 +112,62 @@ class ArticleController {
 
     // Update an article
     static async update(req, res) {
-        // Validate input using ArticleRequest
-        const validationResult = ArticleRequest.validate(req);
-        if (validationResult.error) {
-            console.error("Error validation :", validationResult.error.details);
-            return res.status(400).send({ errors: validationResult.error.details });
-        }
-
         try {
+            // Find the article
             const article = await Article.findByPk(req.params.id);
+            if (!article) {
+                return res.status(404).render('articles/edit', {
+                    errors: [{ message: 'Article not found' }],
+                    oldInput: req.body
+                });
+            }
+            console.log('Request body ddd:', req.body);
+            // Validate the request
+            const validationResult = ArticleRequest.validate(req);
+            if (validationResult.error) {
+                console.error("Validation error:", validationResult.error.details);
+                if (req.file) {
+                    await fs.unlink(req.file.path);
+                }
+                return res.status(400).render('articles/edit', {
+                    errors: validationResult.error.details,
+                    oldInput: req.body,
+                    article: article
+                });
+            }
+    
+            // Handle file upload
+            let imagePath = article.image;
+            if (req.file) {
+                const uploadDir = path.join(__dirname, '..', 'public', 'uploads');
+                const fileExtension = path.extname(req.file.originalname);
+                const newFileName = `${Date.now()}${fileExtension}`;
+                const newPath = path.join(uploadDir, newFileName);
+               
+                await fs.rename(req.file.path, newPath);
+                imagePath = `/uploads/${newFileName}`;
+    
+                // Delete the old image file if it exists
+                if (article.image) {
+                    const oldImagePath = path.join(__dirname, '..', 'public', article.image);
+                    await fs.unlink(oldImagePath).catch(err => console.error('Error deleting old image:', err));
+                }
+            }
+    
+            // Update article
             article.title = req.body.title;
             article.content = req.body.content;
-            article.image = req.body.image;
+            article.image = imagePath;
             await article.save();
-            res.render("article/updateArticle", {
-                article
-            });
+    
+            return res.redirect(`/articles/${article.id}`);
         } catch (error) {
             console.error("Error updating article:", error);
-            return res.status(500).send({ error: "An error occurred while updating the article." });
+            return res.status(500).render('articles/edit', {
+                errors: [{ message: 'An error occurred while updating the article' }],
+                oldInput: req.body,
+                article: await Article.findByPk(req.params.id)
+            });
         }
     }
 
