@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
 
       Article.belongsTo(models.User, {
         foreignKey: 'autherId',
-        as: 'user'
+        as: 'author',
       });
     }
   

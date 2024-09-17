@@ -53,7 +53,7 @@
 										</a>
 									</div>
 
-									<div class="content align-self-center">
+									<div class="content align-self-center" style="padding-right: 20px;">
 										<div class="post-meta mb-3">
 											<a href="#" class="category">Business</a>, <a href="#"
 												class="category">Travel</a> &mdash;
@@ -74,10 +74,10 @@
 
 										<a href="#" class="post-author d-flex align-items-center">
 											<div class="author-pic">
-												<img src="<%= article.user.image %>" alt="Image">
+												<img src="<%= article.author.image %>" alt="Image">
 											</div>
 											<div class="text">
-												<strong><%= article.user.username %></strong>
+												<strong><%= article.author.username %></strong>
 												<span>Author Role</span>
 											</div>
 										</a>
@@ -91,7 +91,6 @@
 			</div>
 		</div>
 	</div>
-</div>
 </div>
 
 <div class="section">
@@ -118,10 +117,10 @@
 							<p><%= article.content.substring(0, 115) %>...</p>
 							<a href="#" class="post-author d-flex align-items-center">
 								<div class="author-pic">
-									<img src="<%= article.user.image %>" alt="Image">
+									<img src="<%= article.author.image %>" alt="Image">
 								</div>
 								<div class="text">
-									<strong><%= article.user.username %></strong>
+									<strong><%= article.author.username %></strong>
 									<span>CEO and Founder</span>
 								</div>
 							</a>
@@ -165,10 +164,10 @@
 							<p><%= article.content.substring(0, 200) %>...</p>
 							<a href="#" class="post-author d-flex align-items-center">
 								<div class="author-pic">
-									<img src="<%= article.user.image %>" alt="Image">
+									<img src="<%= article.author.image %>" alt="Image">
 								</div>
 								<div class="text">
-									<strong><%= article.user.username %></strong>
+									<strong><%= article.author.username %></strong>
 									<span>CEO and Founder</span>
 								</div>
 							</a>

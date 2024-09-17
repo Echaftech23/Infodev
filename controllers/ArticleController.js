@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { Article } = require('../models');
 const { User } = require('../models');
 const ArticleRequest = require('../requests/ArticleRequest');
@@ -12,7 +13,7 @@ class ArticleController {
             const articles = await Article.findAll({
                 include: {
                     model: User,
-                    as: 'user',
+                    as: 'author',
                     attributes: ['username', 'image'],
                 }
             });
@@ -91,15 +92,34 @@ class ArticleController {
     }
 
     // Get a single article
-    static async show(req, res) {
+    static async show (req, res) {
         try {
-            const article = await Article.findByPk(req.params.id);
-            res.render("articles/show", { article });
+            const article = await Article.findByPk(req.params.id, {
+                include: {
+                    model: User,
+                    as: 'author',
+                    attributes: ['username', 'image']
+                }
+            });
+    
+            const relatedArticles = await Article.findAll({
+                where: {
+                    id: { [Op.ne]: article.id }
+                },
+                limit: 3,
+                include: {
+                    model: User,
+                    as: 'author',
+                    attributes: ['username', 'image']
+                }
+            });
+    
+            res.render("articles/show", { article, relatedArticles });
         } catch (error) {
-            console.error("Error getting article:", error);
-            return res.status(500).send({ error: "An error occurred while getting the article." });
+            console.error("Error fetching article details:", error);
+            res.status(500).send("Internal Server Error");
         }
-    }
+    };
 
     // Update an article
     static async edit(req, res) {
@@ -181,11 +201,10 @@ class ArticleController {
     // Delete an article
     static async delete(req, res) {
         try {
-            const article = await Article.findByPk(req.params.id);
-            await article.destroy();
-            res.render("article/deleteArticle", {
-                article
+            await Article.destroy({
+                where: { id: req.params.id }
             });
+            return res.redirect("/");
         } catch (error) {
             console.error("Error deleting article:", error);
             return res.status(500).send({ error: "An error occurred while deleting the article." });

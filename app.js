@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const flash = require('connect-flash');
+const methodOverride = require('method-override');
 const path = require('path');
 const app = express();
 const router = require("./routes/web");
@@ -16,6 +17,9 @@ app.use(express.static(path.join(__dirname, 'public',)));
 // EJS setup
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+// Method override middleware
+app.use(methodOverride('_method'));
 
 // Session setup
 app.use(session({

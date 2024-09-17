@@ -139,6 +139,8 @@
 				}
 
 			});
+
+			mostPopularSlider.goTo(1);
 		}
 
 	}
