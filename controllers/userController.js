@@ -3,11 +3,11 @@ const { User } = require('../models');
 const bcrypt = require('bcryptjs');
 
 const getLoginPage = async (req, res, options = {}) => {
-    res.render("login", options);
+  res.render("login", options);
 }
 
 const getSignPage = async (req, res, options = {}) => {
-    res.render("signUp", options);
+  res.render("signUp", options);
 }
 
 const createUser = async (req , res)=>{
@@ -15,15 +15,16 @@ const createUser = async (req , res)=>{
     const user = await User.findOne({where : {email: req.body.email}});    
     
     if (user) {
-        res.redirect("/sign");
+      req.flash({"message":"Oops Email already exist"});
+      return res.redirect("/sign")
     }
     if(req.body.password == req.body.Confirm_password){
         req.body.password = await bcrypt.hash(req.body.password , 10);
-        const {username , email , password} = req.body
-        // let token = date.curr
+        const {username , email , password } = req.body
+        const token = bcrypt.genSalt(10);
         console.log(req.body);
-        const newUser = await User.create({username , email , password});
-        res.redirect("/")
+        const newUser = await User.create({username , email , password , token});
+        return res.redirect("/login");
     }else{
         res.body.message = "Please check your imformations";
         res.redirect("/sign")
@@ -51,7 +52,7 @@ const check_user = async (req, res) => {
       }
       //add user to session 
       req.session.user = user
-      console.log(req.session.user.username);
+      console.log("seesion = " + req.session.user);
       
       return res.redirect('/');
     } catch (error) {
@@ -62,9 +63,15 @@ const check_user = async (req, res) => {
   };
   
 
+const Logout = (req , res )=>{
+    req.session.destroy();
+    res.redirect("/login")
+}
+
 module.exports ={
     getLoginPage,
     getSignPage,
     createUser,
-    check_user
+    check_user,
+    Logout
 }

@@ -1,4 +1,5 @@
 const { Article } = require('../models');
+const { User } = require('../models');
 const ArticleRequest = require('../requests/ArticleRequest');
 const fs = require('fs').promises;
 const path = require('path');
@@ -8,7 +9,13 @@ class ArticleController {
     // Get all articles
     static async index(req, res) {
         try {
-            const articles = await Article.findAll();
+            const articles = await Article.findAll({
+                include: {
+                    model: User,
+                    as: 'user',
+                    attributes: ['username', 'image'],
+                }
+            });
             res.render("index", { articles });
         } catch (error) {
             console.error("Error getting articles:", error);
@@ -67,7 +74,7 @@ class ArticleController {
                 title: req.body.title,
                 content: req.body.content,
                 image: imagePath,
-                autherId: 1,
+                autherId: 8,
             });
 
             const savedArticle = await article.save();
