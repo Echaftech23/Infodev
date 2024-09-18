@@ -15,58 +15,49 @@
         <div class="card mb-4">
           <div class="card-header d-flex align-items-center">
             <div class="me-3">
-              <img src="https://via.placeholder.com/150" alt="User Profile Picture" id="profilePicture" class="rounded-circle" width="100">
+              <img src="<%= user.profilePicture %>" alt="User Profile Picture" id="profilePicture" class="rounded-circle" width="100">
             </div>
             <div>
-              <h1 class="h4 mb-0" id="userName">John Doe</h1>
-              <p id="userEmail" class="text-muted">johndoe@example.com</p>
+              <h1 class="h4 mb-0" id="userName"><%= user.username %></h1>
+              <p id="userEmail" class="text-muted"><%= user.email %></p>
             </div>
-           
+            <!-- Edit Profile Button -->
+            <div class="ms-auto">
+              <button class="btn btn-warning" id="editProfileBtn">Edit Profile</button>
+              <!-- Delete Profile Button -->
+              <form action="/profile/delete" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-danger">Delete Profile</button>
+              </form>
+            </div>
           </div>
         </div>
 
+        <!-- Edit Profile Form (Initially Hidden) -->
         <div class="card mb-4 hidden" id="profileEditForm">
           <div class="card-header">
             <h2 class="h5">Edit Profile</h2>
           </div>
           <div class="card-body">
-            <form id="editProfileForm">
+            <form action="/profile" method="POST" enctype="multipart/form-data">
               <div class="mb-3">
                 <label for="name" class="form-label">Name:</label>
-                <input type="text" id="name" class="form-control" value="John Doe">
+                <input type="text" id="name" name="username" class="form-control" value="<%= user.username %>">
               </div>
               <div class="mb-3">
                 <label for="email" class="form-label">Email:</label>
-                <input type="email" id="email" class="form-control" value="johndoe@example.com">
+                <input type="email" id="email" name="email" class="form-control" value="<%= user.email %>">
               </div>
               <div class="mb-3">
                 <label for="profilePictureInput" class="form-label">Profile Picture:</label>
-                <input type="file" id="profilePictureInput" class="form-control">
+                <input type="file" id="profilePictureInput" name="profilePicture" class="form-control">
               </div>
               <button type="submit" class="btn btn-primary">Save Changes</button>
             </form>
           </div>
         </div>
 
-        <div class="card">
-          <div class="card-header">
-            <h2 class="h5">My Articles</h2>
-          </div>
-          <div class="list-group list-group-flush" id="articlesList">
-            <% if (user.articles.length > 0) { %>
-              <% user.articles.forEach(article => { %>
-                <div class="list-group-item">
-                  <h3 class="h6 mb-1"><%= article.title %></h3>
-                  <p class="text-muted small">Published on <%= article.createdAt.toDateString() %></p>
-                </div>
-              <% }); %>
-            <% } else { %>
-              <div class="list-group-item">
-                <p class="text-muted">No articles found.</p>
-              </div>
-            <% } %>
-          </div>
-        </div>
+        <!-- User's Articles -->
+        
         
       </div>
     </div>
@@ -75,5 +66,13 @@
   <!-- Bootstrap JS and Popper.js -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../public/js/profile.js"></script>
+
+  <!-- Script to toggle edit form -->
+  <script>
+    document.getElementById('editProfileBtn').addEventListener('click', function() {
+      const form = document.getElementById('profileEditForm');
+      form.classList.toggle('hidden');
+    });
+  </script>
 </body>
 </html>

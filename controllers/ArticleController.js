@@ -7,7 +7,7 @@ class ArticleController {
     static async index(req, res) {
         try {
             const articles = await Article.findAll();
-            res.send('Article index route');
+            res.send('Article index route').render('index');
         } catch (error) {
             console.error("Error getting articles:", error);
             return res.status(500).send({ error: "An error occurred while getting the articles." });

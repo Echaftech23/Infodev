@@ -2,18 +2,19 @@ const express = require("express");
 const Router = express.Router();
 const articleController = require("../controllers/ArticleController");
 const userController = require('../controllers/userController');
-const profileController = require('../controllers/ProfileController'); // Make sure to import your profile controller
+const profileController = require('../controllers/profileController');
 
-// User authentication routes
+// User routes
 Router.get("/login", userController.getLoginPage);
 Router.get("/sign", userController.getSignPage);
 Router.post("/sign/addUser", userController.createUser);
+Router.post("/login/check_user", userController.check_user);
 
 // Profile routes
-Router.get("/profile", profileController.index);           // View user profile
-Router.get("/profile/edit", profileController.edit);       // Get edit profile page
-Router.put("/profile", profileController.update);          // Update user profile
-Router.delete("/profile", profileController.delete);       // Delete user profile
+Router.get("/profile", profileController.showProfile);
+Router.get("/profile/edit", profileController.getEditProfilePage);
+Router.put("/profile", profileController.updateProfile);
+Router.delete("/profile", profileController.deleteProfile);
 
 // Article routes
 Router.get("/", articleController.index);
