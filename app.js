@@ -6,6 +6,7 @@ const methodOverride = require('method-override');
 const path = require('path');
 const app = express();
 const router = require("./routes/web");
+const Auth = require('./middleware/auth');
 
 const expressLayouts = require('express-ejs-layouts')
 
@@ -34,6 +35,9 @@ app.set('layout', 'layouts/layout')
 
 // Flash messages
 app.use(flash());
+
+// Auth middleware
+app.use(Auth.userAuth);
 
 // routes
 app.use('/',router);

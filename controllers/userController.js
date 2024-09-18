@@ -51,7 +51,8 @@ const check_user = async (req, res) => {
         return res.redirect('/login');
       }
       //add user to session 
-      req.session.user = user
+      req.session.user = user;
+      res.locals.user = user;
       console.log("seesion = " + req.session.user);
       
       return res.redirect('/');
@@ -65,7 +66,7 @@ const check_user = async (req, res) => {
 
 const Logout = (req , res )=>{
     req.session.destroy();
-    res.redirect("/login")
+    res.redirect("/")
 }
 
 module.exports ={

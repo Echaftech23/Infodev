@@ -50,6 +50,26 @@
         font-size: 0.875rem;
         font-style: italic;
     }
+
+    .btn {
+	background-color: #222;
+	border-color: #222;
+	border-radius: 4px;
+	padding: 10px 20px;
+}
+
+    .btn + button {
+        color: #fff;
+    }
+
+    .btn + button:hover {
+        background: #2e2e2e;
+        color: #fff;
+    }
+    .cancel-btn:hover{
+        background-color: #F79918 !important;
+        color: #fff !important;
+    }
 </style>
 
 <div class="section post-section pt-5">
@@ -95,7 +115,10 @@
                         <% } %>
                     </div>
                 
-                    <button type="submit" class="btn btn-primary w-100">Publish Article</button>
+                    <div class="mt-4">
+                        <a href="/" class="btn btn-primary cancel-btn">Cancel</a>
+                        <button class="btn btn-danger">Publish Article</button>
+                    </div>
                 </form>
             </div>
         </div>

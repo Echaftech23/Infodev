@@ -17,6 +17,7 @@ Router.get("/sign", (req, res) => {
 
 Router.post("/login/check_user" , userController.check_user)
 Router.post("/sign/addUser" ,userController.createUser)
+Router.get("/logout", userController.Logout);
 
 
 // Article routes :

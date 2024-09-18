@@ -75,7 +75,7 @@ class ArticleController {
                 title: req.body.title,
                 content: req.body.content,
                 image: imagePath,
-                autherId: 8,
+                autherId: req.session.user?.id,
             });
 
             const savedArticle = await article.save();
