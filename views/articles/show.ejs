@@ -89,10 +89,12 @@
                 <p><%= article.content %></p>
                 
                 <!-- Edit and Delete Buttons -->
-                <div class="text-end mt-4">
-                    <a href="/articles/<%= article.id %>/edit" class="btn btn-primary">Edit</a>
-                    <button class="btn btn-danger" id="deleteBtn" onclick="showPop()">Delete</button>
-                </div>
+                <% if (locals.isAuthor) { %>
+                    <div class="text-end mt-4">
+                        <a href="/articles/<%= article.id %>/edit" class="btn btn-primary">Edit</a>
+                        <button class="btn btn-danger" id="deleteBtn" onclick="showPop()">Delete</button>
+                    </div>
+                <% } %>
                 
                 <div class="row mt-5 pt-5 border-top">
                     <div class="col-12">

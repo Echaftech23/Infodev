@@ -36,9 +36,11 @@ class Auth {
                 return res.status(404).send({ error: "Article not found." });
             }
             
-            if (article.userId !== req.session.user.id) {
+            if (article.autherId !== req.session.user.id) {
                 return res.status(403).send({ error: "You are not authorized to perform this action." });
             }
+
+            res.locals.isAuthor = true;
             
             next();
         } catch (error) {
