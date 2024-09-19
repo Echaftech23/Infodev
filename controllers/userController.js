@@ -34,11 +34,7 @@ const createUser = async (req , res)=>{
 
 const check_user = async (req, res) => {
     try {
-      console.log(req.body.email);
       const user = await User.findOne({ where: { email: req.body.email } });
-
-      console.log(user);
-      
       
       if (!user) {
         req.flash('error', 'User not found');
@@ -51,9 +47,8 @@ const check_user = async (req, res) => {
         return res.redirect('/login');
       }
       //add user to session 
-      req.session.user = user;
-      res.locals.user = user;
-      console.log("seesion = " + req.session.user);
+      req.session.user = {id: user.id, username: user.username, email: user.email, image: user.image};
+      // console.log("seesion = ", {id: user.id, username: user.username, email: user.email, image: user.image});
       
       return res.redirect('/');
     } catch (error) {

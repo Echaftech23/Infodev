@@ -2,6 +2,7 @@ const express = require("express");
 const Router = express.Router();
 const articleController = require("../controllers/ArticleController");
 const userController = require('../controllers/userController');
+const Auth = require('../middlewares/auth');
 // const commentController = require('../controllers/commentController');
 
 const multer = require('multer');
@@ -19,15 +20,19 @@ Router.post("/login/check_user" , userController.check_user)
 Router.post("/sign/addUser" ,userController.createUser)
 Router.get("/logout", userController.Logout);
 
+// Apply userAuth middleware to all routes
+Router.use(Auth.userAuth);
 
-// Article routes :
+// Public routes
 Router.get("/", articleController.index);
-Router.get("/articles/create", articleController.create);
-Router.post("/articles/store", upload.single('image'), articleController.store);
-Router.get("/articles/:id", articleController.show);
-Router.get("/articles/:id/edit", articleController.edit);
-Router.post("/articles/:id", upload.single('image'), articleController.update);
-Router.delete("/articles/:id", articleController.delete);
+Router.get("/article/:id", articleController.show);
+
+// Protected routes
+Router.get("/articles/create", Auth.isAuthenticated, articleController.create);
+Router.post("/articles/store", Auth.isAuthenticated, upload.single('image'), articleController.store);
+Router.get("/articles/:id/edit", Auth.isArticleAuthor, articleController.edit);
+Router.post("/articles/:id", Auth.isArticleAuthor, upload.single('image'), articleController.update);
+Router.delete("/articles/:id", Auth.isArticleAuthor, articleController.delete);
 
 // Comments router :
 // Router.post('/', commentController.createComment);
@@ -36,4 +41,3 @@ Router.delete("/articles/:id", articleController.delete);
 // Router.delete('/:commentId', commentController.deleteComment);
 
 module.exports = Router;
-

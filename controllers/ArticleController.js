@@ -27,6 +27,7 @@ class ArticleController {
     // Create a new article
     static async create(req, res) {        
         try {
+            console.log('anas:');
             res.render("articles/add");
         } catch (error) {
             console.error("Error getting article:", error);
@@ -101,6 +102,8 @@ class ArticleController {
                     attributes: ['username', 'image']
                 }
             });
+
+            console.log('Article:', article);
     
             const relatedArticles = await Article.findAll({
                 where: {
@@ -117,7 +120,7 @@ class ArticleController {
             res.render("articles/show", { article, relatedArticles });
         } catch (error) {
             console.error("Error fetching article details:", error);
-            res.status(500).send("Internal Server Error");
+            // res.status(500).send("Internal Server Error");
         }
     };
 
