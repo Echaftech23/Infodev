@@ -6,29 +6,30 @@ const path = require('path');
 const routes = require('./routes/web');
 const app = express();
 const router = require("./routes/web");
+const isAuth = require("./middlewares/isAuth")
+
+app.use(session({
+    secret: 'your_secret_key',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } 
+}));
+
+
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(isAuth)
 
 // EJS setup
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Session setup
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'your_fallback_secret',
-  resave: false,
-  saveUninitialized: true
-}));
 
 // Flash messages
 app.use(flash());
-
-// app.get('/', (req, res) => {
-//   res.render('index');
-// });
 
 // routes
 app.use('/',router);
