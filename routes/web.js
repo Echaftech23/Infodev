@@ -25,10 +25,10 @@ Router.use(Auth.userAuth);
 
 // Public routes
 Router.get("/", articleController.index);
-Router.get("/article/:id", articleController.show);
 
 // Protected routes
 Router.get("/articles/create", Auth.isAuthenticated, articleController.create);
+Router.get("/articles/:id", articleController.show);
 Router.post("/articles/store", Auth.isAuthenticated, upload.single('image'), articleController.store);
 Router.get("/articles/:id/edit", Auth.isArticleAuthor, articleController.edit);
 Router.post("/articles/:id", Auth.isArticleAuthor, upload.single('image'), articleController.update);
