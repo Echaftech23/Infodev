@@ -19,7 +19,6 @@ class ArticleController {
             });
             res.render("index", { articles });
         } catch (error) {
-            console.error("Error getting articles:", error);
             req.flash('error', 'An error occurred while getting the articles.');
             return res.status(500).redirect('/');
         }
@@ -30,7 +29,6 @@ class ArticleController {
         try {
             res.render("articles/add");
         } catch (error) {
-            console.error("Error getting article:", error);
             req.flash('error', 'An error occurred while getting the article.');
             return res.status(500).redirect('/articles/add');
         }
@@ -39,14 +37,11 @@ class ArticleController {
     // Store a new article
     static async store(req, res) {
         try {
-            console.log('Request body:', req.body);
-            console.log('Request file:', req.file);
 
             // Validate the request
             const validationResult = ArticleRequest.validate(req);
            
             if (validationResult.error) {
-                console.log('Validation error:', validationResult.error);
                 if (req.file) {
                     await fs.unlink(req.file.path);
                 }
@@ -62,15 +57,12 @@ class ArticleController {
             if (req.file) {
                 const uploadDir = path.join(__dirname, '..', 'public', 'uploads');
 
-                console.log('Upload directory:', uploadDir);
-
                 const fileExtension = path.extname(req.file.originalname);
                 const newFileName = `${Date.now()}${fileExtension}`;
                 const newPath = path.join(uploadDir, newFileName);
                
                 await fs.rename(req.file.path, newPath);
                 imagePath = `/uploads/${newFileName}`;
-                console.log('File moved successfully to:', newPath);
             }
 
             // Create new article
@@ -81,24 +73,20 @@ class ArticleController {
                 autherId: req.session.user?.id,
             });
 
-            const savedArticle = await article.save();
-            console.log('Article saved successfully:', savedArticle);
+            await article.save();
 
             req.flash('success', 'Article created successfully.');
             return res.redirect("/");
         } catch (error) {
-            console.error('Detailed error in store method:', error);
             req.flash('error', 'An error occurred while creating the article.');
-            return res.status(500).render('articles/add', { 
-                errors: [{ message: 'An error occurred while creating the article' }],
-                oldInput: req.body,
-            });
+            return res.status(500).render('articles/add', { oldInput: req.body });
         }
     }
 
     // Get a single article
     static async show (req, res) {
-        try {
+        try {            
+
             const article = await Article.findByPk(req.params.id, {
                 include: {
                     model: User,
@@ -107,7 +95,12 @@ class ArticleController {
                 }
             });
 
-            console.log('Article:', article);
+            if (!article) {
+                req.flash('error', 'Article not found.');
+                return res.status(404).redirect('/');
+            }
+        
+              const isAuthor = req.session.user && article.autherId === req.session.user.id;                      
     
             const relatedArticles = await Article.findAll({
                 where: {
@@ -121,9 +114,8 @@ class ArticleController {
                 }
             });
     
-            res.render("articles/show", { article, relatedArticles });
+            res.render("articles/show", { article, relatedArticles, isAuthor });
         } catch (error) {
-            console.error("Error fetching article details:", error);
             req.flash('error', 'An error occurred while fetching the article details.');
             return res.status(500).redirect('/');
         }
@@ -135,13 +127,10 @@ class ArticleController {
             const article = await Article.findByPk(req.params.id);
             if (!article) {
                 req.flash('error', 'Article not found.');
-                return res.status(404).render('articles/edit', {
-                    errors: [{ message: 'Article not found' }],
-                });
+                return res.status(404).render('articles/edit');
             }
             res.render("articles/edit", { article });
         } catch (error) {
-            console.error("Error getting article:", error);
             req.flash('error', 'An error occurred while getting the article.');
             return res.status(500).redirect('/');
         }
@@ -154,16 +143,12 @@ class ArticleController {
             const article = await Article.findByPk(req.params.id);
             if (!article) {
                 req.flash('error', 'Article not found.');
-                return res.status(404).render('articles/edit', {
-                    errors: [{ message: 'Article not found' }],
-                    oldInput: req.body
-                });
+                return res.status(404).render('articles/edit', { oldInput: req.body });
             }
-            console.log('Request body ddd:', req.body);
+            
             // Validate the request
             const validationResult = ArticleRequest.validate(req);
             if (validationResult.error) {
-                console.error("Validation error:", validationResult.error.details);
                 if (req.file) {
                     await fs.unlink(req.file.path);
                 }
@@ -201,10 +186,8 @@ class ArticleController {
             req.flash('success', 'Article updated successfully.');
             return res.redirect(`/articles/${article.id}`);
         } catch (error) {
-            console.error("Error updating article:", error);
             req.flash('error', 'An error occurred while updating the article.');
             return res.status(500).render('articles/edit', {
-                errors: [{ message: 'An error occurred while updating the article' }],
                 oldInput: req.body,
                 article: await Article.findByPk(req.params.id)
             });
@@ -220,7 +203,6 @@ class ArticleController {
             req.flash('success', 'Article deleted successfully.');
             return res.redirect("/");
         } catch (error) {
-            console.error("Error deleting article:", error);
             req.flash('error', 'An error occurred while deleting the article.');
             return res.status(500).redirect('/');
         }

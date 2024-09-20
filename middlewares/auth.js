@@ -33,15 +33,14 @@ class Auth {
                 return res.status(404).redirect('/');
             }
             
-            if (article.authorId !== req.session.user.id) {
+            if (!req.session.user || article.autherId !== req.session.user.id) {
                 req.flash('error', 'You are not authorized to perform this action.');
                 return res.status(403).redirect('/');
             }
 
-            res.locals.isAuthor = true;
+            // If we reach here, the user is the author
             next();
         } catch (error) {
-            console.error('Authorization error:', error);
             req.flash('error', 'An error occurred while checking authorization.');
             res.status(500).redirect('/');
         }
