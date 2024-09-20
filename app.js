@@ -35,6 +35,12 @@ app.set('layout', 'layouts/layout')
 // Flash messages
 app.use(flash());
 
+// Pass flash messages to views
+app.use((req, res, next) => {
+  res.locals.messages = req.flash();
+  next();
+});
+
 // routes
 app.use('/',router);
 

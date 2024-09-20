@@ -20,21 +20,23 @@ class ArticleController {
             res.render("index", { articles });
         } catch (error) {
             console.error("Error getting articles:", error);
-            return res.status(500).send({ error: "An error occurred while getting the articles." });
+            req.flash('error', 'An error occurred while getting the articles.');
+            return res.status(500).redirect('/');
         }
     }
 
     // Create a new article
     static async create(req, res) {        
         try {
-            console.log('anas:');
             res.render("articles/add");
         } catch (error) {
             console.error("Error getting article:", error);
-            return res.status(500).send({ error: "An error occurred while getting the article." });
+            req.flash('error', 'An error occurred while getting the article.');
+            return res.status(500).redirect('/articles/add');
         }
     }
 
+    // Store a new article
     static async store(req, res) {
         try {
             console.log('Request body:', req.body);
@@ -82,9 +84,11 @@ class ArticleController {
             const savedArticle = await article.save();
             console.log('Article saved successfully:', savedArticle);
 
+            req.flash('success', 'Article created successfully.');
             return res.redirect("/");
         } catch (error) {
             console.error('Detailed error in store method:', error);
+            req.flash('error', 'An error occurred while creating the article.');
             return res.status(500).render('articles/add', { 
                 errors: [{ message: 'An error occurred while creating the article' }],
                 oldInput: req.body,
@@ -120,15 +124,17 @@ class ArticleController {
             res.render("articles/show", { article, relatedArticles });
         } catch (error) {
             console.error("Error fetching article details:", error);
-            // res.status(500).send("Internal Server Error");
+            req.flash('error', 'An error occurred while fetching the article details.');
+            return res.status(500).redirect('/');
         }
     };
 
-    // Update an article
+    // Edit an article
     static async edit(req, res) {
         try {
             const article = await Article.findByPk(req.params.id);
             if (!article) {
+                req.flash('error', 'Article not found.');
                 return res.status(404).render('articles/edit', {
                     errors: [{ message: 'Article not found' }],
                 });
@@ -136,7 +142,8 @@ class ArticleController {
             res.render("articles/edit", { article });
         } catch (error) {
             console.error("Error getting article:", error);
-            return res.status(500).send({ error: "An error occurred while getting the article." });
+            req.flash('error', 'An error occurred while getting the article.');
+            return res.status(500).redirect('/');
         }
     }
 
@@ -146,6 +153,7 @@ class ArticleController {
             // Find the article
             const article = await Article.findByPk(req.params.id);
             if (!article) {
+                req.flash('error', 'Article not found.');
                 return res.status(404).render('articles/edit', {
                     errors: [{ message: 'Article not found' }],
                     oldInput: req.body
@@ -190,9 +198,11 @@ class ArticleController {
             article.image = imagePath;
             await article.save();
     
+            req.flash('success', 'Article updated successfully.');
             return res.redirect(`/articles/${article.id}`);
         } catch (error) {
             console.error("Error updating article:", error);
+            req.flash('error', 'An error occurred while updating the article.');
             return res.status(500).render('articles/edit', {
                 errors: [{ message: 'An error occurred while updating the article' }],
                 oldInput: req.body,
@@ -207,10 +217,12 @@ class ArticleController {
             await Article.destroy({
                 where: { id: req.params.id }
             });
+            req.flash('success', 'Article deleted successfully.');
             return res.redirect("/");
         } catch (error) {
             console.error("Error deleting article:", error);
-            return res.status(500).send({ error: "An error occurred while deleting the article." });
+            req.flash('error', 'An error occurred while deleting the article.');
+            return res.status(500).redirect('/');
         }
     }
 }
