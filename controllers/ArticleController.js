@@ -203,7 +203,6 @@ class ArticleController {
             req.flash('success', 'Article deleted successfully.');
             return res.redirect("/");
         } catch (error) {
-            console.log(error);
             req.flash('error', 'An error occurred while deleting the article.');
             return res.status(500).redirect('/');
         }
