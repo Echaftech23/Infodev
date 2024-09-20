@@ -2,7 +2,7 @@ const express = require("express");
 const Router = express.Router();
 const articleController = require("../controllers/ArticleController");
 const userController = require('../controllers/userController');
-const profileController = require('../controllers/profileController');
+const profileController = require('../controllers/ProfileController');
 
 // User routes
 Router.get("/login", userController.getLoginPage);
@@ -13,7 +13,7 @@ Router.post("/login/check_user", userController.check_user);
 // Profile routes
 Router.get("/profile", profileController.showProfile);
 Router.get("/profile/edit", profileController.getEditProfilePage);
-Router.put("/profile", profileController.updateProfile);
+Router.post("/profile/update", profileController.updateProfile);
 Router.delete("/profile", profileController.deleteProfile);
 
 // Article routes
