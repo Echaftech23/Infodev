@@ -6,6 +6,11 @@ module.exports = (sequelize, DataTypes) => {
 
     static associate(models) {
         User.belongsToMany(models.Article, { through: 'ArticleUser' });
+
+        User.hasMany(models.Article, {
+          foreignKey: 'autherId',
+          as: 'articles'
+        });
     }
   }
 
@@ -30,6 +35,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'User',
+    tableName: 'users',
   });
   return User;
 };

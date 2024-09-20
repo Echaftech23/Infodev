@@ -14,7 +14,7 @@
         <div class="site-navigation">
             <div class="row">
                 <div class="col-md-6 text-center order-1 order-md-2 mb-3 mb-md-0">
-                    <a href="index.ejs" class="logo m-0 text-uppercase">MernOps Blogs</a>
+                    <a href="/" class="logo m-0 text-uppercase">MernOps Blogs</a>
                 </div>
 
                 <div class="col-md-3 order-3 order-md-1" style="display: flex; align-items: center;">
@@ -36,24 +36,27 @@
                             <li><a href="#"><span class="icon-facebook"></span></a></li>
                             <li><a href="#"><span class="icon-instagram"></span></a></li>
                         </ul>
-
-                        
+                
+                        <% if (locals.user) { %>
                             <div class="dropdown">
                                 <a href="#" class="post-author d-flex align-items-center dropdown-toggle" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <div class="author-pic" style="width: 40px; height: 40px; margin-block-end: 5px;">
-                                        <img src="images/person_1.jpg" style="width: 100%; border-radius: 50%;" alt="Image">
+                                        <img src="<%= locals.user.image %>" style="width: 100%; border-radius: 50%;" alt="User Image">
                                     </div>
                                 </a>
-
+                
                                 <ul class="dropdown-menu" aria-labelledby="profileDropdown" style="width: 210px; margin-top: 0.5rem;">
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-plus-circle"></i> Add an article</a></li>
+                                    <li><a class="dropdown-item" href="/articles/create"><i class="bi bi-plus-circle"></i> Add an article</a></li>
                                     <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> View Profile</a></li>
                                     <li><a class="dropdown-item" href="#"><i class="bi bi-graph-up"></i> Analytics & Data</a></li>
                                     <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Account Settings</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                                    <li><a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
                                 </ul>
                             </div>
+                        <% } else { %>
+                            <a href="/login" class="btn" style="background: #222; color: #fff;">Login</a>
+                        <% } %>
                     </div>
                 </div>
             </div>

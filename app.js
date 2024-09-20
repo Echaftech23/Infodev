@@ -2,8 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const flash = require('connect-flash');
+const methodOverride = require('method-override');
 const path = require('path');
-const routes = require('./routes/web');
 const app = express();
 const router = require("./routes/web");
 
@@ -12,11 +12,14 @@ const expressLayouts = require('express-ejs-layouts')
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public',)));
 
 // EJS setup
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+// Method override middleware
+app.use(methodOverride('_method'));
 
 // Session setup
 app.use(session({
@@ -28,16 +31,12 @@ app.use(session({
 // Set Templating Engine
 app.use(expressLayouts)
 app.set('layout', 'layouts/layout')
-app.set('view engine', 'ejs')
 
 // Flash messages
 app.use(flash());
 
 // routes
 app.use('/',router);
-// app.use('/login', UserRouter);
-// app.use('/users', require('./routes/users'));
-// app.use('/articles', require('./routes/articles'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

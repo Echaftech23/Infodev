@@ -24,6 +24,10 @@ module.exports = {
           type: Sequelize.TEXT,
           allowNull: false
         },
+        image: {
+          type: Sequelize.STRING(255),
+          allowNull: true
+        },
         autherId: {
           type: Sequelize.INTEGER,
           allowNull: false,

@@ -20,27 +20,27 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       },
-      // {
-      //   title: 'Second Article',
-      //   content: 'This is the content of the second article.',
-      //   autherId: 2,
-      //   createdAt: new Date(),
-      //   updatedAt: new Date()
-      // },
-      // {
-      //   title: 'Third Article',
-      //   content: 'This is the content of the third article.',
-      //   autherId: 3,
-      //   createdAt: new Date(),
-      //   updatedAt: new Date()
-      // },
-      // {
-      //   title: 'Fourth Article',
-      //   content: 'This is the content of the fourth article.',
-      //   autherId: 4,
-      //   createdAt: new Date(),
-      //   updatedAt: new Date()
-      // }
+      {
+        title: 'Second Article',
+        content: 'This is the content of the second article.',
+        autherId: 2,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        title: 'Third Article',
+        content: 'This is the content of the third article.',
+        autherId: 3,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        title: 'Fourth Article',
+        content: 'This is the content of the fourth article.',
+        autherId: 4,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
     ], {});
   },
 
