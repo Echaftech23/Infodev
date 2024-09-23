@@ -5,7 +5,6 @@ const methodOverride = require('method-override');
 const path = require('path');
 const app = express();
 const router = require("./routes/web");
-const multer = require('multer');
 require('dotenv').config();
 
 app.use(session({

@@ -1,3 +1,41 @@
+<style>
+    .search-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        display: none;
+        width: 200%;
+        padding: 15px;
+        margin: 15px 0;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        background: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .search-result {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    .search-result:last-child {
+        border-bottom: none;
+    }
+    
+    .search-result h3 {
+        margin: 0;
+        font-size: 16px;
+    }
+    
+    .search-result p {
+        margin: 5px 0 0;
+        font-size: 14px;
+        color: #666;
+    }
+</style>
+
 <!-- mobile menu  -->
 <div class="site-mobile-menu site-navbar-target">
     <div class="site-mobile-menu-header">
@@ -18,17 +56,23 @@
                 </div>
 
                 <div class="col-md-3 order-3 order-md-1" style="display: flex; align-items: center;">
-                    <a href="#" class="burger ms-auto site-menu-toggle js-menu-toggle d-inline-block" style="margin-right: 20px;"
-                        data-toggle="collapse" data-target="#main-navbar">
+                    <a href="#" class="burger ms-auto site-menu-toggle js-menu-toggle d-inline-block"
+                        style="margin-right: 20px;" data-toggle="collapse" data-target="#main-navbar">
                         <span></span>
                     </a>
 
-                    <form action="#" class="search-form">
-                        <span class="icon-search2"></span>
-                        <input type="search" class="form-control" placeholder="Search...">
-                    </form>
+                    <div class="search-container" style="position: relative;">
+                        <form action="/articles/search" method="GET" class="search-form">
+                            <span class="icon-search2"></span>
+                            <input type="search" name="query" class="form-control" placeholder="Search...">
+                        </form>
+                    
+                        <div class="search-dropdown" id="search-results">
+                            <div class="search-result"></div>
+                        </div>
+                    </div>
                 </div>
-                
+
                 <div class="col-md-3 text-end order-2 order-md-3 mb-3 mb-md-0">
                     <div class="d-flex">
                         <ul class="list-unstyled social me-auto">
@@ -36,27 +80,37 @@
                             <li><a href="#"><span class="icon-facebook"></span></a></li>
                             <li><a href="#"><span class="icon-instagram"></span></a></li>
                         </ul>
-                
+
                         <% if (locals.user) { %>
                             <div class="dropdown">
-                                <a href="#" class="post-author d-flex align-items-center dropdown-toggle" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a href="#" class="post-author d-flex align-items-center dropdown-toggle"
+                                    id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <div class="author-pic" style="width: 40px; height: 40px; margin-block-end: 5px;">
-                                        <img src="<%= locals.user.image ? locals.user.image : '/uploads/default-profile.jpeg' %>" style="width: 100%; border-radius: 50%;" alt="User Image">
+                                        <img src="<%= locals.user.image ? locals.user.image : '/uploads/default-profile.jpeg' %>"
+                                            style="width: 100%; border-radius: 50%;" alt="User Image">
                                     </div>
                                 </a>
-                
-                                <ul class="dropdown-menu" aria-labelledby="profileDropdown" style="width: 210px; margin-top: 0.5rem;">
-                                    <li><a class="dropdown-item" href="/articles/create"><i class="bi bi-plus-circle"></i> Add an article</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> View Profile</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-graph-up"></i> Analytics & Data</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Account Settings</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+
+                                <ul class="dropdown-menu" aria-labelledby="profileDropdown"
+                                    style="width: 210px; margin-top: 0.5rem;">
+                                    <li><a class="dropdown-item" href="/articles/create"><i
+                                                class="bi bi-plus-circle"></i> Add an article</a></li>
+                                    <li><a class="dropdown-item" href="/profile"><i class="bi bi-person"></i> View
+                                            Profile</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-graph-up"></i> Analytics &
+                                            Data</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Account
+                                            Settings</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right"></i>
+                                            Logout</a></li>
                                 </ul>
                             </div>
-                        <% } else { %>
-                            <a href="/login" class="btn" style="background: #222; color: #fff;">Login</a>
-                        <% } %>
+                            <% } else { %>
+                                <a href="/login" class="btn" style="background: #222; color: #fff;">Login</a>
+                            <% } %>
                     </div>
                 </div>
             </div>
