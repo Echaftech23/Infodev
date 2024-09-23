@@ -6,7 +6,6 @@ const methodOverride = require('method-override');
 const path = require('path');
 const app = express();
 const router = require("./routes/web");
-const isAuth = require("./middlewares/isAuth")
 
 app.use(session({
     secret: 'your_secret_key',

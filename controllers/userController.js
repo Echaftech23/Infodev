@@ -1,7 +1,6 @@
 const { date } = require('joi');
 const { User } = require('../models');
 const bcrypt = require('bcryptjs');
-const nodemailer = require("nodemailer");
 
 
 const getLoginPage = async (req, res, options = {}) => {
