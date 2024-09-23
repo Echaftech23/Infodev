@@ -1,36 +1,51 @@
 const fs = require('fs');
 const path = require('path');
-const { User } = require('../models');
+const { User, Article } = require('../models');
 
 const showProfile = async (req, res) => {
   try {
-    const userId = req.session.user?.id; 
+    const userId = req.session.user?.id;
 
     if (!userId) {
       return res.redirect('/login'); 
     }
 
-    const user = await User.findByPk(userId);
+   
+    const user = await User.findByPk(userId, {
+      attributes: ['id', 'username', 'email'], 
+      include: {
+        model: Article,
+        as: 'articles',
+        attributes: ['id', 'title', 'content', 'createdAt'], 
+        required: false, 
+      }
+    });
 
     if (!user) {
       return res.status(404).send({ error: 'User not found' });
     }
-
+    
     res.render('profile', {
       user: {
         id: user.id,
         username: user.username,
         email: user.email,
-        profilePicture: user.image || 'https://via.placeholder.com/150',
+        articles: user.articles || [], 
       },
+
       message: req.flash('message') 
     });
-
   } catch (error) {
     console.error("Error fetching profile:", error);
     return res.status(500).send({ error: "An error occurred while fetching the profile." });
   }
 };
+
+module.exports = {
+  showProfile,
+};
+
+
 
 const updateProfile = async (req, res) => {
   try {
@@ -79,56 +94,11 @@ const updateProfile = async (req, res) => {
 };
 
 const getEditProfilePage = async (req, res) => {
-  try {
-    const userId = req.session.user?.id;
-
-    if (!userId) {
-      return res.redirect('/login');
-    }
-
-    const user = await User.findByPk(userId);
-
-    if (!user) {
-      return res.status(404).send({ error: 'User not found' });
-    }
-
-    res.render('editProfile', {
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        profilePicture: user.image || 'https://via.placeholder.com/150',
-      },
-      message: req.flash('message') // Add this line to include flash messages
-    });
-
-  } catch (error) {
-    console.error("Error fetching user for editing:", error);
-    return res.status(500).send({ error: "An error occurred while fetching the user." });
-  }
+ 
 };
 
 const deleteProfile = async (req, res) => {
-  try {
-    const userId = req.session.user?.id;
 
-    if (!userId) {
-      return res.redirect('/login');
-    }
-
-    const user = await User.findByPk(userId);
-
-    if (user) {
-      await user.destroy(); 
-    }
-
-    req.session.destroy(); 
-    res.redirect('/'); 
-
-  } catch (error) {
-    console.error("Error deleting profile:", error);
-    return res.status(500).send({ error: "An error occurred while deleting the profile." });
-  }
 };
 
 module.exports = {
