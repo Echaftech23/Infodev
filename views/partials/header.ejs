@@ -41,7 +41,7 @@
                             <div class="dropdown">
                                 <a href="#" class="post-author d-flex align-items-center dropdown-toggle" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <div class="author-pic" style="width: 40px; height: 40px; margin-block-end: 5px;">
-                                        <img src="<%= locals.user.image %>" style="width: 100%; border-radius: 50%;" alt="User Image">
+                                        <img src="<%= locals.user.image ? locals.user.image : '/uploads/default-profile.jpeg' %>" style="width: 100%; border-radius: 50%;" alt="User Image">
                                     </div>
                                 </a>
                 

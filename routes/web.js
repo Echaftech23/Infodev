@@ -1,7 +1,9 @@
 const express = require("express");
 const Router = express.Router();
+
 const articleController = require("../controllers/ArticleController");
 const userController = require('../controllers/userController');
+const profileController = require('../controllers/ProfileController');
 const Auth = require('../middlewares/auth');
 const commentController = require('../controllers/commentController');
 
@@ -25,6 +27,14 @@ Router.use(Auth.userAuth);
 
 // Public routes
 Router.get("/", articleController.index);
+
+
+// profile
+Router.get('/profile', profileController.showProfile);
+Router.get("/profile/edit", profileController.getEditProfilePage);
+Router.post("/profile/update", profileController.updateProfile);
+Router.delete("/profile", profileController.deleteProfile);
+
 
 // Protected routes
 Router.get("/articles/create", Auth.isAuthenticated, articleController.create);

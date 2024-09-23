@@ -24,7 +24,10 @@ module.exports = (sequelize, DataTypes) => {
     image: DataTypes.STRING,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
-    autherId: DataTypes.INTEGER
+    autherId: {
+      type: DataTypes.INTEGER,
+      allowNull: false, // Author is required
+    },
   }, {
     sequelize,
     modelName: 'Article',
