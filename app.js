@@ -35,7 +35,11 @@ app.use(methodOverride('_method'));
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your_fallback_secret',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: { 
+    secure: false,  
+    maxAge: 100 * 60 * 60 * 1000
+   }
 }));
 
 

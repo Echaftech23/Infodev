@@ -18,7 +18,7 @@ class Auth {
             req.flash('error', 'You need to be logged in to perform this action.');
             setTimeout(() => {
                 res.redirect('/login'); 
-            }, 2000);
+            }, 3000);
         }
     };
 

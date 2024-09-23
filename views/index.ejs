@@ -64,12 +64,12 @@
 
 										<h2 class="heading">
 											<a href="/articles/<%= article.id %>">
-												<%= article.title.substring(0, 70) %>...
+												<%= article.title.substring(0, 70) %>
 											</a>
 										</h2>
 
 										<p>
-											<%= article.content.substring(0, 200) %>...
+											<%= article.content.substring(0, 200) %>
 										</p>
 
 										<a href="#" class="post-author d-flex align-items-center">
@@ -112,9 +112,9 @@
 								<span class="date"><%= new Date(article.createdAt).toDateString() %></span>
 							</div>
 							<h2 class="heading mb-3"><a href="/articles/<%= article.id %>">
-								<%= article.title.substring(0, 64) %>...
+								<%= article.title.substring(0, 64) %>
 							</a></h2>
-							<p><%= article.content.substring(0, 115) %>...</p>
+							<p><%= article.content.substring(0, 115) %></p>
 							<a href="#" class="post-author d-flex align-items-center">
 								<div class="author-pic">
 									<img src="<%= article.author.image %>" alt="Image">
@@ -160,8 +160,8 @@
 								&mdash;
 								<span class="date"><%= new Date(article.createdAt).toDateString() %></span>
 							</div>
-							<h2 class="heading mb-3"><a href="/articles/<%= article.id %>"><%= article.title.substring(0, 70) %>...</a></h2>
-							<p><%= article.content.substring(0, 200) %>...</p>
+							<h2 class="heading mb-3"><a href="/articles/<%= article.id %>"><%= article.title.substring(0, 70) %></a></h2>
+							<p><%= article.content.substring(0, 200) %></p>
 							<a href="#" class="post-author d-flex align-items-center">
 								<div class="author-pic">
 									<img src="<%= article.author.image %>" alt="Image">
