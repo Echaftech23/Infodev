@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.gstatic.com/">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/fonts/icomoon/style.css">
+    <link rel="stylesheet" href="/fonts/flaticon/font/flaticon.css">
+    <link rel="stylesheet" href="/css/tiny-slider.css">
+    <link rel="stylesheet" href="/css/glightbox.min.css">
+    <link rel="stylesheet" href="/css/aos.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <title>MernOps BLog &mdash; Bootstrap 5 Website Template</title>
+
+    <style>
+        .dropdown-menu {
+            background-color: #fff;
+            border: 0;
+            border-radius: 0.375rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            padding: 1rem 0;
+        }
+
+        /* Base alert styles */
+        .alert {
+            position: fixed;
+            bottom: 0;
+            right: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid transparent;
+            border-radius: 0.25rem;
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            z-index: 100;	
+            transition: transform 1s ease-in-out;		
+        }
+
+        /* Alert heading */
+        .alert h4 {
+            color: inherit;
+        }
+
+        .alert p {
+            margin-block: -5px 0;
+            margin-inline: 10px 50px;
+        }
+
+        /* Success alert */
+        .alert-success {
+            color: #0f5132;
+            background-color: #d1e7dd;
+            border-color: #badbcc;
+        }
+
+        /* Error alert */
+        .alert-danger {
+            color: #842029;
+            background-color: #f8d7da;
+            border-color: #f5c2c7;
+        }
+
+        /* Server error (warning) alert */
+        .alert-warning {
+            color: #664d03;
+            background-color: #fff3cd;
+            border-color: #ffecb5;
+        }
+
+        .alert-dismissible img {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+			width: 25px;
+			height: 25px;
+            z-index: 2;
+			cursor: pointer;
+        }
+
+        /* Fade animation */
+        .fade {
+            transition: opacity 0.15s linear;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .fade {
+                transition: none;
+            }
+        }
+
+        .fade:not(.show) {
+            opacity: 0;
+        }
+
+        /* Keyframe animation for moving alert to the right */
+        @keyframes moveRight {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(200%);
+            }
+        }
+
+        /* Class to trigger the animation */
+        .move-right {
+            animation: moveRight 0.6s forwards;
+        }
+
+    </style>
+
+</head>
+
+<body>
+    <!-- Preloader -->
+    <div class="loader">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <!-- /Preloader -->
+
+    <!-- Header Area Start -->
+    <%- include('../partials/header') %>
+    <!-- Header Area End -->
+
+    <div class="container mt-5">
+        <% if (messages.success) { %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <h4>Success!</h4>
+                <p><%= messages.success %></p>
+                <img src="/images/close-circle.svg" data-bs-dismiss="alert" aria-label="Close" alt="">
+            </div>
+        <% } %>
+
+        <% if (messages.error) { %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <h4>Error!</h4>
+                <p><%= messages.error %></p>
+                <img src="/images/close-circle.svg" data-bs-dismiss="alert" aria-label="Close" alt="">
+            </div>
+        <% } %>
+
+        <% if (messages.warning) { %>
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <h4>Server Error!</h4>
+                <p><%= messages.warning %></p>
+                <img src="/images/close-circle.svg" data-bs-dismiss="alert" aria-label="Close" alt="">
+            </div>
+        <% } %>
+    </div>
+
+    <!-- Main Content -->
+    <%- body %>
+
+    <!-- Call To Action Area Start -->
+    <%- include('../partials/cta') %>
+    <!-- Call To Action Area End -->
+
+    <!-- Footer Area Start -->
+    <%- include('../partials/footer') %>
+    <!-- Footer Area End -->
+
+    <!-- **** All JS Files ***** -->
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/tiny-slider.js"></script>
+    <script src="/js/glightbox.min.js"></script>
+    <script src="/js/aos.js"></script>
+    <script src="/js/navbar.js"></script>
+    <script src="/js/counter.js"></script>
+    <script src="/js/custom.js"></script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-23581568-13');
+
+        document.addEventListener('DOMContentLoaded', function () {
+            setTimeout(function () {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(alert => {
+                    alert.classList.add('move-right');
+                });
+            }, 2500);
+        });
+    </script>
+    <script defer
+        src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015"
+        integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ=="
+        data-cf-beacon='{"rayId":"8be632745e3266e6","version":"2024.8.0","serverTiming":{"name":{"cfL4":true}},"token":"cd0b4b3a733644fc843ef0b185f98241","b":1}'
+        crossorigin="anonymous">
+    </script>
+
+</body>
+
+</html>

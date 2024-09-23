@@ -4,26 +4,50 @@ const Router = express.Router();
 const articleController = require("../controllers/ArticleController");
 const userController = require('../controllers/userController');
 const profileController = require('../controllers/ProfileController');
+const Auth = require('../middlewares/auth');
+// const commentController = require('../controllers/commentController');
 
-// User routes
-Router.get("/login", userController.getLoginPage);
-Router.get("/sign", userController.getSignPage);
-Router.post("/sign/addUser", userController.createUser);
-Router.post("/login/check_user", userController.check_user);
+const multer = require('multer');
+const upload = multer({ dest: 'public/uploads/' });
 
-// Profile routes
+// User routes:
+Router.get("/login", (req, res) => {
+    userController.getLoginPage(req, res, { layout: false });
+});
+Router.get("/sign", (req, res) => {
+    userController.getSignPage(req, res, { layout: false });
+});
+
+Router.post("/login/check_user" , userController.check_user)
+Router.post("/sign/addUser" ,userController.createUser)
+Router.get("/logout", userController.Logout);
+
+// Apply userAuth middleware to all routes
+Router.use(Auth.userAuth);
+
+// Public routes
+Router.get("/", articleController.index);
+
+
+// profile
 Router.get('/profile', profileController.showProfile);
 Router.get("/profile/edit", profileController.getEditProfilePage);
 Router.post("/profile/update", profileController.updateProfile);
 Router.delete("/profile", profileController.deleteProfile);
 
-// Article routes
-Router.get("/", articleController.index);
-Router.get("/articles/create", articleController.add);
-Router.post("/store", articleController.store);
+
+// Protected routes
+Router.get("/articles/create", Auth.isAuthenticated, articleController.create);
 Router.get("/articles/:id", articleController.show);
-Router.get("/articles/:id/edit", articleController.edit);
-Router.put("/articles/:id", articleController.update);
-Router.delete("/articles/:id", articleController.delete);
+Router.post("/articles/store", Auth.isAuthenticated, upload.single('image'), articleController.store);
+Router.get("/articles/:id/edit", Auth.isArticleAuthor, articleController.edit);
+Router.post("/articles/:id", Auth.isArticleAuthor, upload.single('image'), articleController.update);
+Router.delete("/articles/:id", Auth.isArticleAuthor, articleController.delete);
+
+// Comments router :
+// Router.post('/', commentController.createComment);
+// Router.get('/:articleId', commentController.getCommentsByArticle);
+// Router.put('/:commentId', commentController.updateComment);
+// Router.delete('/:commentId', commentController.deleteComment);
 
 module.exports = Router;
