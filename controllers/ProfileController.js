@@ -79,16 +79,16 @@ const updateProfile = async (req, res) => {
 
       await user.save(); 
 
-      req.flash('message', 'Profile updated successfully!');
+      req.flash('success', 'Profile updated successfully!');
     } else {
-      req.flash('message', 'User not found.');
+      req.flash('error', 'User not found.');
     }
 
     res.redirect('/profile'); 
 
   } catch (error) {
     console.error("Error updating profile:", error);
-    req.flash('message', 'An error occurred while updating the profile.');
+    req.flash('success', 'An error occurred while updating the profile.');
     return res.redirect('/profile');
   }
 };

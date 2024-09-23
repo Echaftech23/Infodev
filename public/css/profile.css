@@ -1,22 +1,22 @@
 body {
-    background-color: #f8f9fa;
+    background-color: #f8f9fa; /* Light gray background for contrast */
   }
   .profile-card {
-    border: none;
-    background: linear-gradient(135deg, #4a90e2, #9013fe);
-    color: #fff;
+    background-color: #000; /* Black background for the profile card */
+    color: #fff; /* White text */
     border-radius: 1rem;
+    margin-bottom: 1rem;
   }
   .profile-card .btn-outline-primary {
-    border-color: #fff;
-    color: #fff;
+    border-color: #fff; /* White border for buttons */
+    color: #fff; /* White text */
   }
   .profile-card .btn-outline-primary:hover {
-    background-color: #fff;
-    color: #4a90e2;
+    background-color: #fff; /* White background on hover */
+    color: #000; /* Black text on hover */
   }
   .edit-form {
-    background-color: #fff;
+    background-color: #fff; /* White background for the edit form */
     border-radius: 1rem;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   }
@@ -24,19 +24,20 @@ body {
     border-radius: 0.5rem;
   }
   .article-list {
-    background-color: #fff;
+    background-color: #fff; /* White background for the article list */
     border-radius: 1rem;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   }
   .list-group-item {
-    border: none;
+    border: none; /* No border for list items */
   }
   .list-group-item:not(:last-child) {
-    border-bottom: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6; /* Subtle border between list items */
   }
   .list-group-item h5 {
     font-weight: 600;
+    color: #000; /* Black text for article titles */
   }
   .list-group-item p {
-    color: #6c757d;
+    color: #6c757d; /* Muted gray for article content */
   }
