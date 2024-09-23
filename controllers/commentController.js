@@ -1,113 +1,66 @@
-const { Article } = require('../models');
-const { createCommentSchema, updateCommentSchema } = require('../requests/CommentRequest');
+const { Comment } = require('../models'); // Garder seulement cette déclaration
+const commentSchema = require('../requests/commentRequest');
 
 // Créer un commentaire
 exports.createComment = async (req, res) => {
     try {
-        const { error } = createCommentSchema.validate(req.body);
-        if (error) {
-            return res.status(400).json({ message: error.details[0].message });
+        // Vérifier si req.session.user est défini
+        if (!req.session.user) {
+            return res.status(401).json({ message: 'User not authenticated' });
         }
 
         const { content, articleId } = req.body;
-        const userId = req.user.id;  // L'utilisateur connecté
+        const userId = req.session.user.id;  
 
-        // Vérifier si l'article existe
-        const article = await Article.findByPk(articleId);
-        if (!article) {
-            return res.status(404).json({ message: 'Article not found' });
-        }
-
-        // Créer le commentaire
-        const newComment = await Comment.create({
+        // Création du commentaire dans la base de données
+        const comment = await Comment.create({
             content,
+            articleId,
             userId,
-            articleId
         });
 
-        res.status(201).json(newComment);
+        req.flash('success', 'Comment created successfully');
+        res.redirect(`/articles/${articleId}`);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error creating comment' });
+        console.error('Error creating comment:', error);
+        res.status(500).json({ message: 'An error occurred while creating the comment', error: error.message });
     }
 };
 
-// Obtenir tous les commentaires pour un article donné
-exports.getCommentsByArticle = async (req, res) => {
-    try {
-        const { articleId } = req.params;
-
-        const comments = await Comment.findAll({
-            where: { articleId },
-            include: [
-                { model: User, as: 'user', attributes: ['name', 'email'] }
-            ]
-        });
-
-        res.status(200).json(comments);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error fetching comments' });
-    }
-};
-
-// Mettre à jour un commentaire
+// Mise à jour d'un commentaire
 exports.updateComment = async (req, res) => {
     try {
-        const { error } = updateCommentSchema.validate(req.body);
-        if (error) {
-            return res.status(400).json({ message: error.details[0].message });
-        }
-
         const { commentId } = req.params;
         const { content } = req.body;
-        const userId = req.user.id;
 
-        // Trouver le commentaire
+        // Vérification que l'ID du commentaire est valide
+        if (isNaN(commentId)) {
+            return res.status(400).json({ message: 'Invalid comment ID' });
+        }
+
+        // Récupérer le commentaire par ID
         const comment = await Comment.findByPk(commentId);
+
         if (!comment) {
             return res.status(404).json({ message: 'Comment not found' });
         }
 
-        // Vérifier si l'utilisateur est le propriétaire du commentaire
-        if (comment.userId !== userId) {
-            return res.status(403).json({ message: 'Unauthorized' });
+        // Vérifie si l'utilisateur est l'auteur du commentaire
+        if (comment.userId !== req.session.user.id) {
+            return res.status(403).json({ message: 'You are not authorized to update this comment' });
         }
 
         // Mettre à jour le contenu du commentaire
         comment.content = content;
         await comment.save();
 
-        res.status(200).json(comment);
+        req.flash('success', 'Comment updated successfully');
+        return res.redirect(`/articles/${comment.articleId}`); // Redirige vers l'article associé
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error updating comment' });
+        return res.status(500).json({ message: 'An error occurred while updating the comment' });
     }
 };
 
-// Supprimer un commentaire
-exports.deleteComment = async (req, res) => {
-    try {
-        const { commentId } = req.params;
-        const userId = req.user.id;
-
-        // Trouver le commentaire
-        const comment = await Comment.findByPk(commentId);
-        if (!comment) {
-            return res.status(404).json({ message: 'Comment not found' });
-        }
-
-        // Vérifier si l'utilisateur est le propriétaire du commentaire
-        if (comment.userId !== userId) {
-            return res.status(403).json({ message: 'Unauthorized' });
-        }
-
-        // Supprimer le commentaire
-        await comment.destroy();
-
-        res.status(200).json({ message: 'Comment deleted successfully' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error deleting comment' });
-    }
-};
+// Afficher un article avec ses commentaires (commenté pour le moment)
+// exports.show = async (req, res) => { ... };

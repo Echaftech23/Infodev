@@ -1,6 +1,7 @@
 const { Op } = require('sequelize');
 const { Article } = require('../models');
 const { User } = require('../models');
+const { Comment } = require('../models');
 const ArticleRequest = require('../requests/ArticleRequest');
 const fs = require('fs').promises;
 const path = require('path');
@@ -17,7 +18,9 @@ class ArticleController {
                     attributes: ['username', 'image'],
                 }
             });
+            
             res.render("index", { articles });
+         
         } catch (error) {
             req.flash('error', 'An error occurred while getting the articles.');
             return res.status(500).redirect('/');
@@ -86,22 +89,37 @@ class ArticleController {
     // Get a single article
     static async show (req, res) {
         try {            
-
+    
+            // Récupérer l'article avec son auteur et ses commentaires
             const article = await Article.findByPk(req.params.id, {
-                include: {
-                    model: User,
-                    as: 'author',
-                    attributes: ['username', 'image']
-                }
+                include: [
+                    {
+                        model: User,
+                        as: 'author',
+                        attributes: ['username', 'image']
+                    },
+                    {
+                        model: Comment, // Inclure les commentaires associés à cet article
+                        as: 'comments', // Assure-toi que l'alias est correct dans le modèle
+                        include: {
+                            model: User, // Inclure l'utilisateur qui a posté chaque commentaire
+                            as: 'user',
+                            attributes: ['username', 'image']
+                        }
+                    }
+                ]
             });
-
+    
             if (!article) {
                 req.flash('error', 'Article not found.');
                 return res.status(404).redirect('/');
             }
-        
-              const isAuthor = req.session.user && article.autherId === req.session.user.id;                      
     
+            // Vérifier si l'utilisateur connecté est l'auteur de l'article
+            const isAuthor = req.session.user && article.autherId === req.session.user.id;
+            const currentUserId = req.session.user ? req.session.user.id : null;
+    
+            // Récupérer des articles liés (autres articles)
             const relatedArticles = await Article.findAll({
                 where: {
                     id: { [Op.ne]: article.id }
@@ -114,13 +132,14 @@ class ArticleController {
                 }
             });
     
-            res.render("articles/show", { article, relatedArticles, isAuthor });
+            // Rendre la vue avec l'article, les articles liés et les commentaires
+            res.render("articles/show", { article, relatedArticles, isAuthor, currentUserId });
         } catch (error) {
             req.flash('error', 'An error occurred while fetching the article details.');
             return res.status(500).redirect('/');
         }
     };
-
+    
     // Edit an article
     static async edit(req, res) {
         try {
