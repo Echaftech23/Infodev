@@ -4,48 +4,45 @@ class Auth {
     static userAuth = (req, res, next) => {
         if (req.session.user) {
             res.locals.user = req.session.user;
-            // console.log('User found in session:', res.locals.user);
         } else {
             res.locals.user = null;
-            // console.log('No user found in session');
         }
         next();
     };
 
     // Middleware to check if user is authenticated
     static isAuthenticated = (req, res, next) => {
-        // console.log('req.session.user:', req.session.user);
         if (req.session.user) {
-            // console.log('User is authenticated');
             next();
         } else {
-            // console.log('User is not authenticated, redirecting to login');
-            res.redirect('/login');
+            req.flash('error', 'You need to be logged in to perform this action.');
+            setTimeout(() => {
+                res.redirect('/login'); 
+            }, 2000);
         }
     };
 
     // Middleware to check if user is the author of the article
     static isArticleAuthor = async (req, res, next) => {
         try {
-            this.isAuthenticated;
-
             const articleId = req.params.id;
             const article = await Article.findByPk(articleId);
             
             if (!article) {
-                return res.status(404).send({ error: "Article not found." });
+                req.flash('error', 'Article not found.');
+                return res.status(404).redirect('/');
             }
             
-            if (article.autherId !== req.session.user.id) {
-                return res.status(403).send({ error: "You are not authorized to perform this action." });
+            if (!req.session.user || article.autherId !== req.session.user.id) {
+                req.flash('error', 'You are not authorized to perform this action.');
+                return res.status(403).redirect('/');
             }
 
-            res.locals.isAuthor = true;
-            
+            // If we reach here, the user is the author
             next();
         } catch (error) {
-            console.error('Authorization error:', error);
-            res.status(500).send({ error: "An error occurred while checking authorization." });
+            req.flash('error', 'An error occurred while checking authorization.');
+            res.status(500).redirect('/');
         }
     };
 }

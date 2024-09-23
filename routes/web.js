@@ -1,10 +1,9 @@
 const express = require("express");
 const Router = express.Router();
 const articleController = require("../controllers/ArticleController");
-const commentController = require('../controllers/CommentController');
 const userController = require('../controllers/userController');
 const Auth = require('../middlewares/auth');
-// const commentController = require('../controllers/commentController');
+const commentController = require('../controllers/commentController');
 
 const multer = require('multer');
 const upload = multer({ dest: 'public/uploads/' });
@@ -36,9 +35,8 @@ Router.post("/articles/:id", Auth.isArticleAuthor, upload.single('image'), artic
 Router.delete("/articles/:id", Auth.isArticleAuthor, articleController.delete);
 
 // Comments router :
-Router.post('/createComment', commentController.createComment);
-// Router.get('/:articleId', commentController.getCommentsByArticle);
-// Router.put('/:commentId', commentController.updateComment);
+Router.post('/createComment', Auth.isAuthenticated, commentController.createComment);
+Router.put('/comments/:id', Auth.isAuthenticated, commentController.updateComment);
 // Router.delete('/:commentId', commentController.deleteComment);
 
 module.exports = Router;

@@ -1,68 +1,66 @@
-const { Article, Comment, User } = require('../models');
-
+const { Comment } = require('../models'); // Garder seulement cette déclaration
+const commentSchema = require('../requests/commentRequest');
 
 // Créer un commentaire
 exports.createComment = async (req, res) => {
     try {
-        const { content, articleId } = req.body; // Supposant que le contenu et l'ID de l'article sont envoyés dans la requête
-        const userId = req.user.id; // Récupérer l'utilisateur connecté à partir de l'objet req (si tu utilises un système d'authentification)
-
-        // Validation des données
-        if (!content || !articleId) {
-            return res.status(400).json({ message: 'Content and article ID are required' });
+        // Vérifier si req.session.user est défini
+        if (!req.session.user) {
+            return res.status(401).json({ message: 'User not authenticated' });
         }
 
-        // Création du commentaire
+        const { content, articleId } = req.body;
+        const userId = req.session.user.id;  
+
+        // Création du commentaire dans la base de données
         const comment = await Comment.create({
             content,
             articleId,
             userId,
         });
 
-        // Réponse avec le commentaire créé
-        res.status(201).json({ message: 'Comment created successfully', comment });
+        req.flash('success', 'Comment created successfully');
+        res.redirect(`/articles/${articleId}`);
     } catch (error) {
         console.error('Error creating comment:', error);
-        res.status(500).json({ message: 'An error occurred while creating the comment' });
+        res.status(500).json({ message: 'An error occurred while creating the comment', error: error.message });
     }
 };
 
-// Afficher un article avec ses commentaires
-exports.show = async (req, res) => {
+// Mise à jour d'un commentaire
+exports.updateComment = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { commentId } = req.params;
+        const { content } = req.body;
 
-        // Vérification que l'ID de l'article est valide
-        if (isNaN(id)) {
-            return res.status(400).json({ message: 'Invalid article ID' });
+        // Vérification que l'ID du commentaire est valide
+        if (isNaN(commentId)) {
+            return res.status(400).json({ message: 'Invalid comment ID' });
         }
 
-        // Récupérer l'article avec les commentaires et leurs utilisateurs associés
-        const article = await Article.findByPk(id, {
-            include: [
-                {
-                    model: Comment,
-                    as: 'comments',
-                    include: [
-                        {
-                            model: User,
-                            as: 'user',
-                            attributes: ['username', 'email'] // Corriger selon ton modèle
-                        }
-                    ]
-                }
-            ]
-        });
+        // Récupérer le commentaire par ID
+        const comment = await Comment.findByPk(commentId);
 
-        // Vérifier si l'article existe
-        if (!article) {
-            return res.status(404).json({ message: 'Article not found' });
+        if (!comment) {
+            return res.status(404).json({ message: 'Comment not found' });
         }
 
-        // Rendre la vue pour afficher l'article et ses commentaires
-        res.render('articles/show', { article });
+        // Vérifie si l'utilisateur est l'auteur du commentaire
+        if (comment.userId !== req.session.user.id) {
+            return res.status(403).json({ message: 'You are not authorized to update this comment' });
+        }
+
+        // Mettre à jour le contenu du commentaire
+        comment.content = content;
+        await comment.save();
+
+        req.flash('success', 'Comment updated successfully');
+        return res.redirect(`/articles/${comment.articleId}`); // Redirige vers l'article associé
     } catch (error) {
-        console.error('Error fetching article:', error);
-        res.status(500).json({ message: 'An error occurred while fetching the article' });
+        console.error(error);
+        return res.status(500).json({ message: 'An error occurred while updating the comment' });
     }
 };
+
+// Afficher un article avec ses commentaires (commenté pour le moment)
+// exports.show = async (req, res) => { ... };

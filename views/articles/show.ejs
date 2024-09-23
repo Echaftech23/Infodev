@@ -89,7 +89,7 @@
                 <p><%= article.content %></p>
                 
                 <!-- Edit and Delete Buttons -->
-                <% if (locals.isAuthor) { %>
+                <% if (isAuthor) { %>
                     <div class="text-end mt-4">
                         <a href="/articles/<%= article.id %>/edit" class="btn btn-primary">Edit</a>
                         <button class="btn btn-danger" id="deleteBtn" onclick="showPop()">Delete</button>
@@ -113,7 +113,6 @@
 </div>
 
 
-<!-- Section des commentaires -->
 <div class="section comment-section pt-5">
     <div class="container">
         <h4 class="heading mb-4">Comments</h4>
@@ -123,14 +122,24 @@
             <ul class="list-unstyled">
                 <% article.comments.forEach(function(comment) { %>
                     <li class="mb-3">
-                        <strong><%= comment.user.username %></strong> <small class="text-muted">(<%= new Date(comment.createdAt).toDateString() %>)</small>
+                        <div class="author-pic" style="width: 40px; height: 40px; margin-block-end: 5px;">
+                            <img src="<%= comment.user.image %>" style="width: 100%; border-radius: 50%;" alt="User Image">
+                        </div>
+                        <strong><%= comment.user.username %></strong> 
+                        <small class="text-muted">(<%= new Date(comment.createdAt).toDateString() %>)</small>
                         <p><%= comment.content %></p>
+
+                        <!-- Afficher le formulaire de mise à jour uniquement pour le propriétaire du commentaire -->
+                        <% if (comment.userId === currentUserId) { %>
+                            <button class="btn btn-primary mt-3" onclick="openEditPopup(<%= comment.id %>, '<%= comment.content %>')">Modifier</button>
+                        <% } %>
                     </li>
                 <% }) %>
             </ul>
         <% } else { %>
             <p>No comments yet. Be the first to comment!</p>
         <% } %>
+
     </div>
 </div>
 
@@ -138,14 +147,43 @@
 <div class="section comment-form-section pt-5">
     <div class="container">
         <h4 class="heading mb-4">Leave a Comment</h4>
-        <form action="/articles/<%= article.id %>/comments" method="POST">
+        <form action="/createComment" method="POST">
             <div class="form-group">
+                <input type="hidden" name="articleId" value="<%= article.id %>">
                 <textarea name="content" class="form-control" rows="4" placeholder="Write your comment here..." required></textarea>
             </div>
             <button type="submit" class="btn btn-primary mt-3">Submit Comment</button>
-        </form>
+        </form>        
     </div>
 </div>
+
+<!-- Popup pour modifier le commentaire -->
+<div id="editPopup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 1px solid #ccc; z-index: 1000;">
+    <h5>Modifier le Commentaire</h5>
+    <form id="editCommentForm" action="" method="POST">
+        <textarea name="content" class="form-control" rows="4" required></textarea>
+        <input type="hidden" name="_method" value="PUT">
+        <button type="submit" class="btn btn-primary mt-3">Modifier</button>
+        <button type="button" class="btn btn-secondary mt-3" onclick="closeEditPopup()">Annuler</button>
+    </form>
+</div>
+
+<!-- Masque d'arrière-plan pour la popup -->
+<div id="popupOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 999;"></div>
+
+<script>
+    function openEditPopup(commentId, commentContent) {
+        document.getElementById('editCommentForm').action = '/comments/' + commentId; // Définit l'URL d'action du formulaire
+        document.querySelector('#editPopup textarea[name="content"]').value = commentContent; // Remplit le textarea avec le contenu du commentaire
+        document.getElementById('editPopup').style.display = 'block'; // Affiche la pop-up
+        document.getElementById('popupOverlay').style.display = 'block'; // Affiche l'arrière-plan foncé
+    }
+
+    function closeEditPopup() {
+        document.getElementById('editPopup').style.display = 'none'; // Masque la pop-up
+        document.getElementById('popupOverlay').style.display = 'none'; // Masque l'arrière-plan
+    }
+</script>
 
 
 <div class="section pb-0">

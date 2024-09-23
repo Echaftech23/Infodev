@@ -25,7 +25,11 @@ app.use(methodOverride('_method'));
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your_fallback_secret',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: { 
+    secure: false,
+    maxAge: 100 * 60 * 60 * 1000
+   }
 }));
 
 // Set Templating Engine
@@ -34,6 +38,12 @@ app.set('layout', 'layouts/layout')
 
 // Flash messages
 app.use(flash());
+
+// Pass flash messages to views
+app.use((req, res, next) => {
+  res.locals.messages = req.flash();
+  next();
+});
 
 // routes
 app.use('/',router);
