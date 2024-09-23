@@ -30,13 +30,14 @@ exports.createComment = async (req, res) => {
 // Mise à jour d'un commentaire
 exports.updateComment = async (req, res) => {
     try {
-        const { commentId } = req.params;
-        const { content } = req.body;
+        // const { commentId } = req.params;
+        const { content, commentId} = req.body;
+     
 
         // Vérification que l'ID du commentaire est valide
-        if (isNaN(commentId)) {
-            return res.status(400).json({ message: 'Invalid comment ID' });
-        }
+        // if (isNaN(commentId)) {
+        //     return res.status(400).json({ message: 'Invalid comment ID' });
+        // }
 
         // Récupérer le commentaire par ID
         const comment = await Comment.findByPk(commentId);
@@ -62,5 +63,32 @@ exports.updateComment = async (req, res) => {
     }
 };
 
-// Afficher un article avec ses commentaires (commenté pour le moment)
-// exports.show = async (req, res) => { ... };
+// Supprimer un commentaire
+exports.deleteComment = async (req, res) => {
+    try {
+        const { commentId } = req.params;
+
+        // Récupérer le commentaire par ID
+        const comment = await Comment.findByPk(commentId);
+
+        if (!comment) {
+            return res.status(404).json({ message: 'Comment not found' });
+        }
+
+        // Vérifie si l'utilisateur est l'auteur du commentaire
+        if (comment.userId !== req.session.user.id) {
+            return res.status(403).json({ message: 'You are not authorized to delete this comment' });
+        }
+
+        // Supprime le commentaire
+        await comment.destroy();
+
+        req.flash('success', 'Comment deleted successfully');
+        return res.redirect(`/articles/${comment.articleId}`);
+    } catch (error) {
+        console.error('Error deleting comment:', error);
+        return res.status(500).json({ message: 'An error occurred while deleting the comment' });
+    }
+};
+
+

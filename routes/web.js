@@ -46,7 +46,9 @@ Router.delete("/articles/:id", Auth.isArticleAuthor, articleController.delete);
 
 // Comments router :
 Router.post('/createComment', Auth.isAuthenticated, commentController.createComment);
-Router.put('/comments/:id', Auth.isAuthenticated, commentController.updateComment);
-// Router.delete('/:commentId', commentController.deleteComment);
+Router.post('/comments/:id', Auth.isAuthenticated, commentController.updateComment);
+Router.delete('/comments/:commentId', Auth.isAuthenticated, commentController.deleteComment);
+
+
 
 module.exports = Router;

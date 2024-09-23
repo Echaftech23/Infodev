@@ -15,7 +15,7 @@
 	background: #2e2e2e;
 }
 
-.container-pop{
+.container-pop, .container-popp{
 	display: none;
 	justify-content: center;
 	align-items: center;
@@ -132,6 +132,9 @@
                         <!-- Afficher le formulaire de mise à jour uniquement pour le propriétaire du commentaire -->
                         <% if (comment.userId === currentUserId) { %>
                             <button class="btn btn-primary mt-3" onclick="openEditPopup(<%= comment.id %>, '<%= comment.content %>')">Modifier</button>
+                            <button class="btn btn-danger mt-3" onclick="showDeleteCommentPopup(<%= comment.id %>)">Delete</button>
+
+                        
                         <% } %>
                     </li>
                 <% }) %>
@@ -163,6 +166,7 @@
     <form id="editCommentForm" action="" method="POST">
         <textarea name="content" class="form-control" rows="4" required></textarea>
         <input type="hidden" name="_method" value="PUT">
+        <input id="commentId" type="hidden" name="commentId" >
         <button type="submit" class="btn btn-primary mt-3">Modifier</button>
         <button type="button" class="btn btn-secondary mt-3" onclick="closeEditPopup()">Annuler</button>
     </form>
@@ -174,6 +178,7 @@
 <script>
     function openEditPopup(commentId, commentContent) {
         document.getElementById('editCommentForm').action = '/comments/' + commentId; // Définit l'URL d'action du formulaire
+        document.getElementById('commentId').value= commentId;
         document.querySelector('#editPopup textarea[name="content"]').value = commentContent; // Remplit le textarea avec le contenu du commentaire
         document.getElementById('editPopup').style.display = 'block'; // Affiche la pop-up
         document.getElementById('popupOverlay').style.display = 'block'; // Affiche l'arrière-plan foncé
@@ -183,8 +188,27 @@
         document.getElementById('editPopup').style.display = 'none'; // Masque la pop-up
         document.getElementById('popupOverlay').style.display = 'none'; // Masque l'arrière-plan
     }
+
 </script>
 
+
+
+<div class="container-popp" id="deleteCommentPopup">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Are you sure you want to delete this comment?</h5>
+            <div class="form-btns">
+                <!-- Bouton d'annulation -->
+                <button class="btn btn-primary" onclick="hideDeleteCommentPopup()">Cancel</button>
+                <!-- Formulaire de suppression du commentaire -->
+                <form id="deleteCommentForm" action="" method="POST">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" class="btn btn-danger">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="section pb-0">
     <div class="container">
@@ -243,6 +267,22 @@
 </div>
 
 <script>
+    // Fonction pour afficher le pop-up de suppression de commentaire
+    function showDeleteCommentPopup(commentId) {
+        console.log("fffffff")
+        const deleteForm = document.getElementById('deleteCommentForm');
+        // Modifier l'action du formulaire pour correspondre à l'ID du commentaire
+        deleteForm.action = '/comments/' + commentId + '?_method=DELETE';
+        // Afficher le pop-up de suppression
+        document.getElementById('deleteCommentPopup').classList.add('show');
+    }
+
+    // Fonction pour masquer le pop-up de suppression de commentaire
+    function hideDeleteCommentPopup() {
+        document.getElementById('deleteCommentPopup').classList.remove('show');
+    }
+</script>
+<script>
 	const deleteBtn = document.querySelector('deleteBtn');
 	const containerPop = document.querySelector('.container-pop');
 
@@ -260,3 +300,4 @@
 		}
 	})
 </script>
+
