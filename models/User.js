@@ -5,8 +5,12 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
 
     static associate(models) {
-      // User.hasMany(Article);
-      // Article.belongsTo(User);
+        User.belongsToMany(models.Article, { through: 'ArticleUser' });
+
+        User.hasMany(models.Article, {
+          foreignKey: 'autherId',
+          as: 'articles'
+        });
     }
   }
 
@@ -31,6 +35,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'User',
+    tableName: 'users',
   });
   return User;
 };

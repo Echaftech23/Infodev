@@ -1,0 +1,188 @@
+<style>
+.btn {
+	background-color: #222;
+	border-color: #222;
+	border-radius: 4px;
+	padding: 10px 20px;
+}
+
+.btn + button {
+	color: #fff;
+}
+
+.btn + button:hover {
+	color: #fff;
+	background: #2e2e2e;
+}
+
+.container-pop{
+	display: none;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100vh;
+	background: #6261616a;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 100;
+	transition: all 0.3s ease;
+}
+
+.show{
+	display: flex;
+}
+
+.card{
+	width: 18rem; 
+	padding: 20px;
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 0 10px 0 #0000001a;
+	text-align: center;
+}
+
+.form-btns{
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 40px;
+}
+
+.form-btns .btn-primary{
+	background: #007bff;
+	border-color: #007bff;
+	color: #fff;
+	margin-right: 10px;
+}
+
+.form-btns .btn-primary:hover{
+	background: #0056b3;
+	border-color: #0056b3;
+	color: #fff;
+}
+
+.form-btns .btn-danger{
+	background: #dc3545;
+	border-color: #dc3545;
+	color: #fff;
+}
+
+.form-btns .btn-danger:hover{
+	background: #c82333;
+	border-color: #c82333;
+	color: #fff;
+}
+</style>
+
+
+<div class="section post-section pt-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center">
+                    <img src="<%= article.author.image %>" alt="Image" class="author-pic img-fluid rounded-circle mx-auto">
+                </div>
+                <span class="d-block text-center"><%= article.author.username %></span>
+                <span class="date d-block text-center small text-uppercase text-black-50 mb-5"><%= new Date(article.createdAt).toDateString() %></span>
+                <h2 class="heading mb-4"><%= article.title %></h2>
+                <img src="<%= article.image %>" alt="Image" class="img-fluid rounded mb-4">
+                <p><%= article.content %></p>
+                
+                <!-- Edit and Delete Buttons -->
+                <% if (isAuthor) { %>
+                    <div class="text-end mt-4">
+                        <a href="/articles/<%= article.id %>/edit" class="btn btn-primary">Edit</a>
+                        <button class="btn btn-danger" id="deleteBtn" onclick="showPop()">Delete</button>
+                    </div>
+                <% } %>
+                
+                <div class="row mt-5 pt-5 border-top">
+                    <div class="col-12">
+                        <span class="fw-bold text-black small mb-1">Share</span>
+                        <ul class="social list-unstyled">
+                            <li><a href="#"><span class="icon-facebook"></span></a></li>
+                            <li><a href="#"><span class="icon-twitter"></span></a></li>
+                            <li><a href="#"><span class="icon-linkedin"></span></a></li>
+                            <li><a href="#"><span class="icon-pinterest"></span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section pb-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="heading">Related</h2>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <% relatedArticles.forEach(function(relatedArticle) { %>
+                <div class="col-lg-12">
+                    <div class="post-entry d-md-flex small-horizontal mb-5">
+                        <div class="me-md-5 thumbnail mb-3 mb-md-0">
+                            <img src="<%= relatedArticle.image %>" alt="Image" class="img-fluid">
+                        </div>
+                        <div class="content">
+                            <div class="post-meta mb-3">
+                                <a href="#" class="category">Business</a>, <a href="#" class="category">Travel</a>
+                                &mdash;
+                                <span class="date"><%= new Date(relatedArticle.createdAt).toDateString() %></span>
+                            </div>
+                            <h2 class="heading"><a href="/articles/<%= relatedArticle.id %>"><%= relatedArticle.title %></a></h2>
+                            <p><%= relatedArticle.content.substring(0, 200) %>...</p>
+                            <a href="#" class="post-author d-flex align-items-center">
+                                <div class="author-pic">
+                                    <img src="<%= relatedArticle.author.image %>" alt="Image">
+                                </div>
+                                <div class="text">
+                                    <strong><%= relatedArticle.author.username %></strong>
+                                    <span>Author, <%= relatedArticle.author.postCount %> published posts</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+</div>
+
+<div class="container-pop">
+	<!-- dlelete popup -->
+	<div class="card">
+		<div class="card-body">
+			<h5 class="card-title">Are you sure you want to delete this article?</h5>
+			<div class="form-btns">
+				<button class="btn btn-primary" onclick="hidePop()">Cancel</button>
+				<form action="/articles/<%= article.id %>?_method=DELETE" method="POST">
+					<button type="submit" class="btn btn-danger">Submit</button>
+				</form>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<script>
+	const deleteBtn = document.querySelector('deleteBtn');
+	const containerPop = document.querySelector('.container-pop');
+
+	const showPop = () => {
+		containerPop.classList.add('show');
+	}
+
+	const hidePop = () => {
+		containerPop.classList.remove('show');
+	}
+
+	containerPop.addEventListener('click', (e) => {
+		if(e.target.classList.contains('container-pop')){
+			hidePop();
+		}
+	})
+</script>

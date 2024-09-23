@@ -1,0 +1,145 @@
+<style>
+    .image-upload {
+        position: relative;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        width: 100%;
+        height: 450px;
+        border-radius: 8px;
+    }
+
+    .image-upload input {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .image-upload img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .article-title {
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        font-weight: 500;
+        color: #222;
+        font-size: clamp(24px, 3vw, 40px);
+    }
+
+    .atricle-content {
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        font-weight: 500;
+        color: #222;
+        font-size: 16px;
+        height: max-content;
+    }
+
+    .error {
+        display: block;
+        margin-top: 0.25rem;
+        font-size: 0.875rem;
+        font-style: italic;
+    }
+
+    .btn {
+	background-color: #222;
+	border-color: #222;
+	border-radius: 4px;
+	padding: 10px 20px;
+}
+
+    .btn + button {
+        color: #fff;
+    }
+
+    .btn + button:hover {
+        background: #2e2e2e;
+        color: #fff;
+    }
+    .cancel-btn:hover{
+        background-color: #F79918 !important;
+        color: #fff !important;
+    }
+</style>
+
+<div class="section post-section pt-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <form method="post" action="/articles/<%= article.id %>" enctype="multipart/form-data">
+                    <div class="mb-2 image-upload">
+                        <img src="<%= article.image ? article.image : '/images/image-thumbnail.svg' %>" 
+                            id="articleImage" alt="Image Preview" 
+                            class="image-preview rounded mb-4">
+                        <input type="file" accept="image/*" id="articleImageUpload" name="image" class="article-image-upload">
+                    </div>
+                    <!-- error -->
+                    <% if (typeof errors !== 'undefined' && errors.some(e => e.context.key === 'image')) { %>
+                        <small class="text-danger error">
+                            <%= errors.find(e => e.context.key === 'image').message %>
+                        </small>
+                    <% } %>
+                
+                    <div class="mb-3">
+                        <input type="text" class="form-control article-title" id="articleTitle" name="title" 
+                            value="<%= typeof oldInput !== 'undefined' ? oldInput.title : article.title %>"
+                            placeholder="Article Title">
+                
+                        <!-- error -->
+                        <% if (typeof errors !== 'undefined' && errors.some(e => e.context.key === 'title')) { %>
+                            <small class="text-danger error">
+                                <%= errors.find(e => e.context.key === 'title').message %>
+                            </small>
+                        <% } %>
+                    </div>
+                
+                    <div class="mb-3">
+                        <textarea class="form-control atricle-content" id="articleContent" name="content" rows="4"
+                            placeholder="Write your article content here..."><%= typeof oldInput !== 'undefined' ? oldInput.content : article.content %></textarea>
+                
+                        <!-- error -->
+                        <% if (typeof errors !== 'undefined' && errors.some(e => e.context.key === 'content')) { %>
+                            <small class="text-danger error">
+                                <%= errors.find(e => e.context.key === 'content').message %>
+                            </small>
+                        <% } %>
+                    </div>
+                
+                    <div class="mt-4">
+                        <a href="/" class="btn btn-primary cancel-btn">Cancel</a>
+                        <button class="btn btn-danger">Publish Article</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('addArticleForm');
+        const articleImage = document.getElementById('articleImage');
+        const articleImageUpload = document.getElementById('articleImageUpload');
+
+        articleImageUpload.addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    articleImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+</script>
