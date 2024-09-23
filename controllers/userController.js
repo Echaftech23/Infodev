@@ -1,6 +1,8 @@
 const { date } = require('joi');
 const { User } = require('../models');
 const bcrypt = require('bcryptjs');
+const nodemailer = require("nodemailer");
+
 
 const getLoginPage = async (req, res, options = {}) => {
   res.render("login", options);
@@ -10,10 +12,10 @@ const getSignPage = async (req, res, options = {}) => {
   res.render("signUp", options);
 }
 
-const createUser = async (req , res)=>{
+const createUser = async (req, res) => {
 
-    const user = await User.findOne({where : {email: req.body.email}});    
-    
+    const user = await User.findOne({ where: { email: req.body.email } });
+
     if (user) {
       req.flash({"message":"Oops Email already exist"});
       return res.redirect("/sign")
@@ -34,37 +36,44 @@ const createUser = async (req , res)=>{
 
 const check_user = async (req, res) => {
     try {
-      const user = await User.findOne({ where: { email: req.body.email } });
-      
-      if (!user) {
-        req.flash('error', 'User not found');
-        return res.redirect('/login');
-      }
-      const passwordMatch = await bcrypt.compare(req.body.password, user.password);
+        console.log(req.body.email);
+        const user = await User.findOne({ where: { email: req.body.email } });
 
-      if (!passwordMatch) {
-        req.flash('error', 'Incorrect password');
-        return res.redirect('/login');
-      }
-      //add user to session 
-      req.session.user = {id: user.id, username: user.username, email: user.email, image: user.image};
-      // console.log("seesion = ", {id: user.id, username: user.username, email: user.email, image: user.image});
-      
-      return res.redirect('/');
+        // console.log(user);
+
+
+        if (!user) {
+            req.flash('error', 'User not found');
+            return res.redirect('/login');
+        }
+        const passwordMatch = await bcrypt.compare(req.body.password, user.password);
+
+        if (!passwordMatch) {
+            req.flash('error', 'Incorrect password');
+            return res.redirect('/login');
+        }
+        //add user to session 
+        req.session.user = user
+        // res.cookie('user', JSON.stringify(user));
+        console.log("seesion = " + req.session.user);
+
+
+        return res.redirect('/');
     } catch (error) {
-      console.error('Error during login:', error);
-      req.flash('error', 'Something went wrong. Please try again.');
-      return res.redirect('/login');
-    }
-  };
-  
+        console.error('Error during login:', error);
+        req.flash('error', 'Something went wrong. Please try again.');
+        return res.redirect('/login');
 
-const Logout = (req , res )=>{
+    }
+};
+
+
+const Logout = (req, res) => {
     req.session.destroy();
-    res.redirect("/")
+    res.redirect("/login")
 }
 
-module.exports ={
+module.exports = {
     getLoginPage,
     getSignPage,
     createUser,
