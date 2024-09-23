@@ -112,6 +112,42 @@
     </div>
 </div>
 
+
+<!-- Section des commentaires -->
+<div class="section comment-section pt-5">
+    <div class="container">
+        <h4 class="heading mb-4">Comments</h4>
+
+        <!-- Boucle pour afficher les commentaires -->
+        <% if (article.comments && article.comments.length > 0) { %>
+            <ul class="list-unstyled">
+                <% article.comments.forEach(function(comment) { %>
+                    <li class="mb-3">
+                        <strong><%= comment.user.username %></strong> <small class="text-muted">(<%= new Date(comment.createdAt).toDateString() %>)</small>
+                        <p><%= comment.content %></p>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } else { %>
+            <p>No comments yet. Be the first to comment!</p>
+        <% } %>
+    </div>
+</div>
+
+<!-- Formulaire pour laisser un commentaire -->
+<div class="section comment-form-section pt-5">
+    <div class="container">
+        <h4 class="heading mb-4">Leave a Comment</h4>
+        <form action="/articles/<%= article.id %>/comments" method="POST">
+            <div class="form-group">
+                <textarea name="content" class="form-control" rows="4" placeholder="Write your comment here..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Submit Comment</button>
+        </form>
+    </div>
+</div>
+
+
 <div class="section pb-0">
     <div class="container">
         <div class="row">

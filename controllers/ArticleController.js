@@ -9,6 +9,7 @@ class ArticleController {
 
     // Get all articles
     static async index(req, res) {
+        console.log(res);
         try {
             const articles = await Article.findAll({
                 include: {
@@ -17,7 +18,9 @@ class ArticleController {
                     attributes: ['username', 'image'],
                 }
             });
+            
             res.render("index", { articles });
+         
         } catch (error) {
             console.error("Error getting articles:", error);
             return res.status(500).send({ error: "An error occurred while getting the articles." });
